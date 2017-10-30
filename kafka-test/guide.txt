@@ -1,0 +1,11 @@
+info:
+https://thenewstack.io/apache-kafka-cornerstone-iot-data-platform/
+
+guide:
+https://dzone.com/articles/running-apache-kafka-on-windows-os
+
+zookeeper:
+http://it.apache.contactlab.it/zookeeper/stable/zookeeper-3.4.10.tar.gz
+
+kafka:
+http://it.apache.contactlab.it/kafka/0.11.0.1/kafka_2.12-0.11.0.1.tgz
