@@ -6,7 +6,6 @@ Exactly once (2)
 """
 
 import paho.mqtt.client as mqtt
-import random
 
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -20,11 +19,14 @@ client.on_connect = on_connect
 client.connect("LOCALHOST", 1883, 60)
 client.loop_start()
 
-pippo = random.choice(seq)
-i = 0
 
-while True:
-    client.publish('prova', pippo, 0)  # the third parameter is the QoS
+client.publish('prova', 'hhh', 0)  # the third parameter is the QoS
+
+i = 0
+input('premi enter')
+while i < 40000:
+    client.publish('prova', i, 0)  # the third parameter is the QoS
+    i = i + 1
 
 
 

@@ -23,6 +23,7 @@ while i < 40000:
     client.subscribe('prova', 0)  # the second parameter is the Qos
     i = 1+i
 
+time.sleep(10)
 now1 = time.clock()
 print(now1-now)
 
