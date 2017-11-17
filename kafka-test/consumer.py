@@ -3,7 +3,7 @@ import time
 
 
 def main():
-    consumer = KafkaConsumer(bootstrap_servers='localhost:9092',
+    consumer = KafkaConsumer(bootstrap_servers='localhost:2181',
                              auto_offset_reset='earliest')
     consumer.subscribe(['my-topic'])
     consumer.poll()
