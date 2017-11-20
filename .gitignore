@@ -60,3 +60,5 @@ target/
 ~\$itial_analysis\.docx
 
 Documentation/UML/Mosaccio\.mdzip\.bak
+
+kafka-test/\.vscode/
