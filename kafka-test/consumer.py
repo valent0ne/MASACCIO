@@ -3,9 +3,9 @@ import time
 
 
 def main():
-    consumer = KafkaConsumer(bootstrap_servers='localhost:2181',
+    consumer = KafkaConsumer(bootstrap_servers='localhost:9092',
                              auto_offset_reset='earliest')
-    consumer.subscribe(['my-topic'])
+    consumer.subscribe(['my-topic-andrea'])
     consumer.poll()
     while True:
         for msg in consumer:
