@@ -64,3 +64,11 @@ Documentation/UML/Mosaccio\.mdzip\.bak
 kafka-test/\.vscode/
 
 documentation/~\$liverableTemplate-SA2017-2018_D2\.rtf
+
+implementation/mosaccio/\.idea/
+
+implementation/mosaccio/mosaccio\.iml
+
+implementation/kafkaClientStoring/kafkaClientStoring\.iml
+
+implementation/kafkaClientStoring/\.idea/
