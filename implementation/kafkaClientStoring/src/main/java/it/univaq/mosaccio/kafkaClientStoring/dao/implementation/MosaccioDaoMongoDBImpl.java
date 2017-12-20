@@ -1,10 +1,19 @@
 package it.univaq.mosaccio.kafkaClientStoring.dao.implementation;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.util.JSON;
 import it.univaq.mosaccio.kafkaClientStoring.dao.data.DaoDataMongoDBImpl;
 import it.univaq.mosaccio.kafkaClientStoring.dao.exception.DaoException;
 import it.univaq.mosaccio.kafkaClientStoring.dao.interfaces.MosaccioDaoMongoDB;
 import it.univaq.mosaccio.kafkaClientStoring.model.Area;
+import org.bson.Document;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -13,6 +22,9 @@ import java.util.List;
  */
 public class MosaccioDaoMongoDBImpl extends DaoDataMongoDBImpl implements MosaccioDaoMongoDB {
 
+    //logger
+    private static final Logger LOGGER = LoggerFactory.getLogger(MosaccioDaoMongoDBImpl.class);
+
     /**
      * constructor
      */
@@ -20,22 +32,22 @@ public class MosaccioDaoMongoDBImpl extends DaoDataMongoDBImpl implements Mosacc
         super();
     }
 
-    /**
-     * initialize the connection to the db and declares the prepared statements
-     * @throws DaoException in case of errors
-     */
-    @Override
-    public void init() throws DaoException {
+
+
+    public void insert(String value, String collection){
         try{
-            super.init();
+            LOGGER.info("inserting value to collection {}", collection);
+            MongoCollection<Document> c = this.dataBase.getCollection(collection);
+            Document doc = Document.parse(value);
+            c.insertOne(doc);
+            LOGGER.info("value inserted");
         }catch (Exception e){
-            throw new DaoException("Cannot initialize MosaccioDaoMySQL", e);
+            LOGGER.error("cannot insert to mongo - {}", e.getMessage());
+            if(LOGGER.isDebugEnabled()){
+                e.printStackTrace();
+            }
         }
-    }
 
-    public void insert(JSONObject j){
-
-        //TODO finisci metodo
     }
 
 

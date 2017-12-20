@@ -12,7 +12,6 @@ public class DaoException extends Exception{
         super(message, cause);
     }
 
-
     public DaoException(Throwable cause) {
         super(cause);
     }
@@ -20,6 +19,7 @@ public class DaoException extends Exception{
 
     @Override
     public String getMessage() {
+
         return super.getMessage() + (getCause()!=null?" ("+getCause().getMessage()+")":"");
     }
 

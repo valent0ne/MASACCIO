@@ -50,6 +50,7 @@ public class MosaccioDaoMySQLImpl extends DaoDataMySQLImpl implements MosaccioDa
             while(rs.next()){
                 Area a = new Area(this);
                 a.setId(rs.getString("id"));
+                a.setName(rs.getString("name"));
                 a.setDescription(rs.getString("description"));
                 a.setLatitude(rs.getString("latitude"));
                 a.setLongitude(rs.getString("longitude"));

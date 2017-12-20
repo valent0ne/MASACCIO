@@ -5,16 +5,16 @@ import time
 def main():
 
     producer = KafkaProducer(bootstrap_servers='localhost:9092')
-    for i in range(400000):
-        msg = "lolo22_{}".format(i)
-        producer.send('roio', bytes(str(msg), 'UTF-8'))
-        producer.send('coppito_0', bytes(str(msg), 'UTF-8'))
-        producer.send('coppito_1', bytes(str(msg), 'UTF-8'))
-        producer.send('coppito_2', bytes(str(msg), 'UTF-8'))
-        producer.send('medicina', bytes(str(msg), 'UTF-8'))
-        producer.send('economia', bytes(str(msg), 'UTF-8'))
+    for i in range(40000):
+        msg = "{'test': 'mongo'}"
+        producer.send('a1.1', bytes(str(msg), 'UTF-8'))
+        producer.send('a1.2', bytes(str(msg), 'UTF-8'))
+        producer.send('a1.3', bytes(str(msg), 'UTF-8'))
+        producer.send('a1.4', bytes(str(msg), 'UTF-8'))
+        producer.send('a1.5', bytes(str(msg), 'UTF-8'))
+        producer.send('a1.6', bytes(str(msg), 'UTF-8'))
         print("send msg: {}".format(msg))
-    time.sleep(5)
+    time.sleep(1)
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ import it.univaq.mosaccio.kafkaClientStoring.dao.exception.DaoException;
 public class DaoDataMongoDBImpl implements DaoData{
 
     private MongoClient mongoClient = null;
-    private MongoDatabase dataBase = null;
+    protected MongoDatabase dataBase = null;
 
     public DaoDataMongoDBImpl(){
         super();

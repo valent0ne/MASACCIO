@@ -6,6 +6,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 public class Area {
 
     private String id;
+    private String name;
     private String description;
     private String latitude;
     private String longitude;
@@ -16,6 +17,7 @@ public class Area {
      */
     public Area (DaoData d){
         id = null;
+        name = null;
         description = null;
         latitude = null;
         longitude = null;
@@ -27,6 +29,14 @@ public class Area {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
