@@ -1,10 +1,5 @@
 package it.univaq.mosaccio.kafkaClientStoring.dao.data;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import javax.sql.DataSource;
-
-import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
 import static it.univaq.mosaccio.kafkaClientStoring.Main.*;

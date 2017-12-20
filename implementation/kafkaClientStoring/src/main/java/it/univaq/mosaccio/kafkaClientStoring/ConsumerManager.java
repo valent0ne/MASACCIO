@@ -1,16 +1,24 @@
 package it.univaq.mosaccio.kafkaClientStoring;
 
+import it.univaq.mosaccio.kafkaClientStoring.dao.exception.DaoException;
 import it.univaq.mosaccio.kafkaClientStoring.dao.implementation.MosaccioDaoMongoDBImpl;
+import it.univaq.mosaccio.kafkaClientStoring.dao.implementation.MosaccioDaoMySQLImpl;
+import it.univaq.mosaccio.kafkaClientStoring.model.Area;
+import static it.univaq.mosaccio.kafkaClientStoring.Main.*;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.KafkaException;
+import org.apache.kafka.common.errors.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
 
 public class ConsumerManager {
 
@@ -38,8 +46,12 @@ public class ConsumerManager {
 
     }
 
-    public void subscribe(List<String> topics){
-        // SUBSCRIBE TO ALL THE TOPICS
+    /**
+     * subscribe to the topics returned by getAreas()
+     */
+    public void subscribe(){
+        List<String> topics = getAreas();
+
         try {
             LOGGER.info("subscribing...");
             this.consumer.subscribe(topics);
@@ -53,18 +65,47 @@ public class ConsumerManager {
         }
     }
 
-    public void consume(Integer pollSize){
-        // POLL FOR TO READ DATA
 
+    /**
+     * retrieves the area list from the mysql db and return the names
+     */
+    private List<String> getAreas() {
+        MosaccioDaoMySQLImpl m = new MosaccioDaoMySQLImpl();
+        List<String> out = new ArrayList<>();
+        try {
+            m.init(); // to init the connection with sql DB
+            List<Area> l = m.getAreas();
+            LOGGER.info("fetched areas");
+            for (Area a : l) {
+                LOGGER.info("area name: " + a.getName());
+                out.add(a.getName());
+            }
+            m.destroy(); // to close the connection
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return out;
+    }
+
+    /**
+     * consumes all the data from all the subscribed topics
+     * @param pollSize size of the single poll
+     */
+    public void consume(Integer pollSize){
+        long startTime = System.currentTimeMillis();
         try {
             mongo.init();
             while(true) {
+                long estimatedTime = System.currentTimeMillis() - startTime;
+                if (estimatedTime > REFRESH_TIME){
+                    throw new TimeoutException("timeout reached, refreshing...");
+                }
                 // poll return a list of records: Each record contains the topic and partition the record came from
                 ConsumerRecords<String, String> records = this.consumer.poll(pollSize);
                 for (ConsumerRecord<String, String> record : records) {
                     LOGGER.info("consumed record: (topic = {}, partition = {}, offset = {}, key = {}, value = {})\n", record.topic(), record.partition(), record.offset(), record.key(), record.value());
                     mongo.insert(record.value(), record.topic());
-                    // COMMIT DEFAULT TO TRUE: IF WE MANAGE IT WILL BE BETTER IN ORDER TO AVOID LOSS OF DATA (SYNCRONOUS OR ASYNCRONOUS??)
+                    // TODO check autocommit
                 }
             }
 

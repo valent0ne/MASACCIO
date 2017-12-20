@@ -1,24 +1,11 @@
 package it.univaq.mosaccio.kafkaClientStoring;
 
-
-import ch.qos.logback.classic.Level;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import it.univaq.mosaccio.kafkaClientStoring.dao.exception.DaoException;
-import it.univaq.mosaccio.kafkaClientStoring.dao.implementation.MosaccioDaoMongoDBImpl;
-import it.univaq.mosaccio.kafkaClientStoring.dao.implementation.MosaccioDaoMySQLImpl;
-import org.apache.kafka.common.KafkaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-
-import it.univaq.mosaccio.kafkaClientStoring.model.*;
-
-import java.util.List;
+import static it.univaq.mosaccio.kafkaClientStoring.Utils.*;
 
 public class Main {
     //logger
@@ -72,6 +59,10 @@ public class Main {
     @Parameter(names = {"--kafka_poll_size", "-k_poll_size"}, description = "kafka poll size")
     public static Integer KAFKA_POLL_SIZE = 100;
 
+    //kafka consumer poll size
+    @Parameter(names = {"--refresh_time", "-refresh"}, description = "topic list refresh time (ms)")
+    public static Integer REFRESH_TIME = 30 * 1000; //30 seconds
+
     /**
      * main - init of logging framework
      *
@@ -104,47 +95,21 @@ public class Main {
 
     }
 
-    /**
-     * retrieves the area list from the mysql db and return the names
-     */
-    private List<String> getAreas() {
-        MosaccioDaoMySQLImpl m = new MosaccioDaoMySQLImpl();
-        List<String> out = new ArrayList<>();
-        try {
-            m.init(); // to init the connection with sql DB
-            List<Area> l = m.getAreas();
-            LOGGER.info("fetched areas");
-            for (Area a : l) {
-                LOGGER.info("area name: " + a.getName());
-                out.add(a.getName());
-            }
-            m.destroy(); // to close the connection
-        } catch (DaoException e) {
-            LOGGER.error(e.getMessage());
-        }
-        return out;
-    }
-
-
-    /**
-     * utility function - changes the logging level given the level as a string
-     *
-     * @param level String containing the logging level
-     */
-    private static void setLoggingLevel(String level) {
-        Level l = Level.toLevel(level);
-        ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-        root.setLevel(l);
-    }
 
     /**
      * main function
      */
     private void run() {
-
+        //create the consumermanager object specifying address and group
         ConsumerManager c = new ConsumerManager(KAFKA_ADDRESS, KAFKA_GROUP);
-        c.subscribe(getAreas());
-        c.consume(KAFKA_POLL_SIZE);
+        // after REFRESH_TIME the consumption will be broken and then restarted
+        while(true){
+            //subscribe to all the area topics
+            c.subscribe();
+            //start consumption
+            c.consume(KAFKA_POLL_SIZE);
+        }
+
 
     }
 

@@ -1,7 +1,6 @@
 package it.univaq.mosaccio.kafkaClientStoring.model;
 
 import it.univaq.mosaccio.kafkaClientStoring.dao.data.DaoData;
-import org.apache.commons.dbcp2.BasicDataSource;
 
 public class Area {
 
