@@ -5,7 +5,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 public class Area {
 
-    private Integer id;
+    private String id;
     private String description;
     private String latitude;
     private String longitude;
@@ -21,11 +21,11 @@ public class Area {
         longitude = null;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

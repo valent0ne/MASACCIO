@@ -34,6 +34,7 @@ public class MosaccioDaoMongoDBImpl extends DaoDataMongoDBImpl implements Mosacc
     }
 
     public void insert(JSONObject j){
+
         //TODO finisci metodo
     }
 

@@ -6,11 +6,23 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import it.univaq.mosaccio.kafkaClientStoring.dao.exception.DaoException;
 import it.univaq.mosaccio.kafkaClientStoring.dao.implementation.MosaccioDaoMongoDBImpl;
+import it.univaq.mosaccio.kafkaClientStoring.dao.implementation.MosaccioDaoMySQLImpl;
+import org.apache.kafka.common.KafkaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import org.json.simple.JSONObject;
+
+//import util.properties packages
+import java.util.Properties;
+//import KafkaProducer packages
+import org.apache.kafka.clients.consumer.*;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 
 import it.univaq.mosaccio.kafkaClientStoring.model.*;
+import it.univaq.mosaccio.kafkaClientStoring.dao.*;
 
 import java.util.List;
 
@@ -89,23 +101,61 @@ public class Main {
     /**
      * main function
      */
-    private void run(){
+    private void run() {
         LOGGER.debug("DEBUG: ON");
         System.out.println("Hello world");
 
-        MosaccioDaoMongoDBImpl m = new MosaccioDaoMongoDBImpl();
-        try{
-            m.init();
+        // create new properties kafka object
+        Properties props = new Properties();
+        props.put("bootstrap.servers", "localhost:9092");
+        // we set here the group id
+        props.put("group.id", "KafkaStoring");
+        // we set here values about the deserializer
+        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
+
+        MosaccioDaoMySQLImpl m = new MosaccioDaoMySQLImpl();
+        List<String> temp = new ArrayList<>();
+        try {
+            m.init(); // to init the connection with sql DB
             List<Area> l = m.getAreas();
-            for(Area a : l){
-                LOGGER.info("area id: "+a.getId());
+            for (Area a : l) {
+                LOGGER.info("area id: " + a.getId());
+                temp.add(a.getId());
             }
+            m.destroy(); // to close the connection
         } catch (DaoException e) {
             LOGGER.error(e.getMessage());
         }
 
+        // SUBSCRIBE TO ALL THE TOPICS
+        try {
+            consumer.subscribe(temp);
 
-    }
+        } catch (KafkaException e) {
+
+            // TODO: 19/12/2017
+        }
+
+        // POLL FOR TO READ DATA
+        try {
+
+            while(true) {
+                // poll return a list of records: Each record contains the topic and partition the record came from
+                ConsumerRecords<String, String> records = consumer.poll(100);
+                for (ConsumerRecord<String, String> record : records) {
+                    System.out.printf("Consumer Record:(topic = %s, partition = %s offset= %s, key = %s, value = %s, )\n",record.topic(), record.partition(), record.offset(), record.key(), record.value());
+
+                    // COMMIT DEFAULT TO TRUE: IF WE MANAGE IT WILL BE BETTER IN ORDER TO AVOID LOSS OF DATA (SYNCRONOUS OR ASYNCRONOUS??)
+                   }
+                }
+            } finally{
+                consumer.close();
+            }
+
+        }
+
 
     /**
      * utility function - changes the logging level given the level as a string

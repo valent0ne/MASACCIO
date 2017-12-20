@@ -49,7 +49,7 @@ public class MosaccioDaoMySQLImpl extends DaoDataMySQLImpl implements MosaccioDa
             ResultSet rs = this.getAreas.executeQuery();
             while(rs.next()){
                 Area a = new Area(this);
-                a.setId(rs.getInt("id"));
+                a.setId(rs.getString("id"));
                 a.setDescription(rs.getString("description"));
                 a.setLatitude(rs.getString("latitude"));
                 a.setLongitude(rs.getString("longitude"));
