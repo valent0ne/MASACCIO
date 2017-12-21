@@ -39,7 +39,6 @@ public class ConsumerManager {
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         // we set here values about the deserializer
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-        // properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.connect.json.JsonDeserializer");
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 
 
@@ -96,11 +95,12 @@ public class ConsumerManager {
      */
     public void consume(Integer pollSize){
         long startTime = System.currentTimeMillis();
+        Integer refresh_time = Integer.parseInt(Main.properties.getProperty("refresh_time"));
         try {
             mongo.init();
             while(true) {
                 long estimatedTime = System.currentTimeMillis() - startTime;
-                if (estimatedTime > REFRESH_TIME){
+                if (estimatedTime > refresh_time){
                     throw new TimeoutException("timeout reached, refreshing...");
                 }
                 // poll return a list of records: Each record contains the topic and partition the record came from

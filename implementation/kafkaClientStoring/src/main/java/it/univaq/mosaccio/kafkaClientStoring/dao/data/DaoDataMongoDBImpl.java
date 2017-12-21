@@ -5,6 +5,7 @@ import com.mongodb.MongoClient;
 import static it.univaq.mosaccio.kafkaClientStoring.Main.*;
 
 import com.mongodb.client.MongoDatabase;
+import it.univaq.mosaccio.kafkaClientStoring.Main;
 import it.univaq.mosaccio.kafkaClientStoring.dao.exception.DaoException;
 
 public class DaoDataMongoDBImpl implements DaoData{
@@ -21,8 +22,8 @@ public class DaoDataMongoDBImpl implements DaoData{
     public void init() throws DaoException {
 
         try {
-            mongoClient = new MongoClient(MONGO_ADDR.split(":")[0], Integer.parseInt(MONGO_ADDR.split(":")[1]));
-            dataBase = mongoClient.getDatabase(MONGO_DB);
+            mongoClient = new MongoClient(Main.properties.getProperty("mongo_address").split(":")[0], Integer.parseInt(Main.properties.getProperty("mongo_address").split(":")[1]));
+            dataBase = mongoClient.getDatabase(Main.properties.getProperty("mongo_db_name"));
 
         } catch (Exception e) {
             throw new DaoException("Error: mongodb connection failed", e);

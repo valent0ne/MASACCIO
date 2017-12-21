@@ -3,6 +3,8 @@ package it.univaq.mosaccio.kafkaClientStoring.dao.data;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.sql.DataSource;
+
+import it.univaq.mosaccio.kafkaClientStoring.Main;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import static it.univaq.mosaccio.kafkaClientStoring.Main.*;
@@ -18,9 +20,9 @@ public class DaoDataMySQLImpl implements DaoData{
         super();
         BasicDataSource ds = new BasicDataSource();
         ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUsername(MYSQL_USER);
-        ds.setPassword(MYSQL_PSW);
-        ds.setUrl("jdbc:mysql://"+MYSQL_ADDR+"/"+MYSQL_DB);
+        ds.setUsername(Main.properties.getProperty("mysql_user"));
+        ds.setPassword(Main.properties.getProperty("mysql_password"));
+        ds.setUrl("jdbc:mysql://"+Main.properties.getProperty("mysql_address")+"/"+Main.properties.getProperty("mysql_db_name"));
         ds.setValidationQuery("SELECT 1");
         this.datasource = ds;
         this.connection = null;
@@ -31,8 +33,6 @@ public class DaoDataMySQLImpl implements DaoData{
     public void init() throws DaoException {
 
         try {
-            // InitialContext ctx = new InitialContext();
-            // DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/gamingplatform");
 
             connection = datasource.getConnection();
 

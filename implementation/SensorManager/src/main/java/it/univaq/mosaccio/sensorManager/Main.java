@@ -6,8 +6,10 @@ import com.beust.jcommander.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import static it.univaq.mosaccio.sensorManager.Utils.readProperties;
 import static it.univaq.mosaccio.sensorManager.Utils.setLoggingLevel;
 
 public class Main {
@@ -19,18 +21,11 @@ public class Main {
     @Parameter(names = {"--log", "-l"}, description = "log level")
     private static String LOG_LEVEL = "info";
 
-    //mysql db username
-    @Parameter(names = {"--kafka_topic", "-k_t"}, description = "kafka topic name")
-    public static String KAFKA_TOPIC = "";
+    //configuration file
+    @Parameter(names = {"--config", "-c"}, description = "configuration file")
+    public static String CONFIG_FILE = "config.properties";
 
-    //kafka cluster address
-    @Parameter(names = {"--kafka_addr", "-k_addr"}, description = "kafka cluster address (host:port)")
-    public static String KAFKA_ADDRESS = "localhost:9092";
-
-
-    //kafka cluster address
-    @Parameter(names = {"--sensor_id", "-s_id"}, description = "device identifier")
-    public static String SENSOR_ID = "999";
+    public static Properties properties;
 
 
     public static void main(String[] args) {
@@ -43,7 +38,11 @@ public class Main {
 
         try {
             jc.parse(args);
+            LOGGER.info("setting logging level {}...", LOG_LEVEL.toUpperCase());
             setLoggingLevel(LOG_LEVEL);
+
+            LOGGER.info("loading properties from {}...", CONFIG_FILE);
+            properties = readProperties(CONFIG_FILE);
 
         } catch (Exception e) {
             //if there is something wrong print the cli usage instructions
