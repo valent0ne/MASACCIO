@@ -1,8 +1,9 @@
 package it.univaq.mosaccio.kafkaClientStoring;
 
-import it.univaq.mosaccio.kafkaClientStoring.dao.exception.DaoException;
 import it.univaq.mosaccio.kafkaClientStoring.dao.implementation.MosaccioDaoMongoDBImpl;
 import it.univaq.mosaccio.kafkaClientStoring.dao.implementation.MosaccioDaoMySQLImpl;
+import it.univaq.mosaccio.kafkaClientStoring.dao.interfaces.MosaccioDaoMongoDB;
+import it.univaq.mosaccio.kafkaClientStoring.dao.interfaces.MosaccioDaoMySQL;
 import it.univaq.mosaccio.kafkaClientStoring.model.Area;
 import static it.univaq.mosaccio.kafkaClientStoring.Main.*;
 
@@ -27,7 +28,8 @@ public class ConsumerManager {
 
     private KafkaConsumer<String, String> consumer;
     private Properties properties;
-    private MosaccioDaoMongoDBImpl mongo;
+    private MosaccioDaoMongoDB mongo;
+    private MosaccioDaoMySQL mysql;
 
     public ConsumerManager(String address, String groupId){
         // create new properties kafka object
@@ -43,6 +45,7 @@ public class ConsumerManager {
 
         this.consumer = new KafkaConsumer<>(properties);
         this.mongo = new MosaccioDaoMongoDBImpl();
+        this.mysql = new MosaccioDaoMySQLImpl();
 
     }
 
@@ -70,18 +73,17 @@ public class ConsumerManager {
      * retrieves the area list from the mysql db and return the names
      */
     private List<String> getAreas() {
-        MosaccioDaoMySQLImpl m = new MosaccioDaoMySQLImpl();
         List<String> out = new ArrayList<>();
         try {
-            m.init(); // to init the connection with sql DB
-            List<Area> l = m.getAreas();
+            this.mysql.init(); // to init the connection with sql DB
+            List<Area> l = this.mysql.getAreas();
             LOGGER.info("fetched areas");
             for (Area a : l) {
                 LOGGER.info("area name: " + a.getName());
                 out.add(a.getName());
             }
-            m.destroy(); // to close the connection
-        } catch (DaoException e) {
+            this.mysql.close(); // to close the connection
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
         return out;
