@@ -43,7 +43,7 @@ public class ConsumerManager {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 
 
-        this.consumer = new KafkaConsumer<>(properties);
+
         this.mongo = new MosaccioDaoMongoDBImpl();
         this.mysql = new MosaccioDaoMySQLImpl();
 
@@ -73,6 +73,7 @@ public class ConsumerManager {
      * retrieves the area list from the mysql db and return the names
      */
     private List<String> getAreas() {
+        this.consumer = new KafkaConsumer<>(properties);
         List<String> out = new ArrayList<>();
         try {
             this.mysql.init(); // to init the connection with sql DB

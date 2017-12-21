@@ -72,3 +72,11 @@ implementation/mosaccio/mosaccio\.iml
 implementation/kafkaClientStoring/kafkaClientStoring\.iml
 
 implementation/kafkaClientStoring/\.idea/
+
+implementation/sensorManager/\.classpath
+
+implementation/sensorManager/\.project
+
+implementation/sensorManager/\.settings/
+
+implementation/SensorManager/\.idea/
