@@ -27,17 +27,9 @@
       <file leaf-file-name="SensorManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/it/univaq/mosaccio/sensorManager/SensorManager.java">
           <provider selected="true" editor-type-id="text-editor">
-<<<<<<< Updated upstream
             <state relative-caret-position="15">
               <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
-=======
-            <state relative-caret-position="200">
-              <caret line="17" column="12" lean-forward="true" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
->>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
@@ -45,13 +37,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/it/univaq/mosaccio/sensorManager/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-<<<<<<< Updated upstream
             <state relative-caret-position="930">
               <caret line="62" column="4" lean-forward="false" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="4" />
-=======
-            <state relative-caret-position="-278">
-              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
->>>>>>> Stashed changes
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -288,27 +275,16 @@
       <created>1513852868829</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-<<<<<<< Updated upstream
       <updated>1513852868829</updated>
       <workItem from="1513852872942" duration="981000" />
       <workItem from="1513860100076" duration="543000" />
       <workItem from="1513866560930" duration="350000" />
       <workItem from="1513866940851" duration="163000" />
-=======
-      <updated>1513778868259</updated>
-      <workItem from="1513778871505" duration="48000" />
-      <workItem from="1513778932071" duration="2569000" />
-      <workItem from="1513782115895" duration="4292000" />
->>>>>>> Stashed changes
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-<<<<<<< Updated upstream
     <option name="totallyTimeSpent" value="2037000" />
-=======
-    <option name="totallyTimeSpent" value="6909000" />
->>>>>>> Stashed changes
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
@@ -322,11 +298,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-<<<<<<< Updated upstream
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32992327" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-=======
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43323863" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
->>>>>>> Stashed changes
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -455,29 +427,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/it/univaq/mosaccio/sensorManager/SensorManager.java">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< Updated upstream
         <state relative-caret-position="15">
           <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
-=======
-        <state relative-caret-position="200">
-          <caret line="17" column="12" lean-forward="true" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
->>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/it/univaq/mosaccio/sensorManager/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< Updated upstream
         <state relative-caret-position="930">
           <caret line="62" column="4" lean-forward="false" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="4" />
-=======
-        <state relative-caret-position="-278">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
->>>>>>> Stashed changes
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
