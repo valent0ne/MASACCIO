@@ -54,8 +54,6 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
-# PyBuilder
-target/
 
 ~\$itial_analysis\.docx
 
@@ -80,3 +78,15 @@ implementation/sensorManager/\.project
 implementation/sensorManager/\.settings/
 
 implementation/SensorManager/\.idea/
+
+implementation/kafkaClientStoring/target/classes/
+
+implementation/kafkaClientStoring/target/maven-archiver/
+
+implementation/kafkaClientStoring/target/maven-status/maven-compiler-plugin/compile/default-compile/
+
+implementation/sensorManager/target/classes/
+
+implementation/sensorManager/target/maven-archiver/
+
+implementation/sensorManager/target/maven-status/maven-compiler-plugin/compile/default-compile/

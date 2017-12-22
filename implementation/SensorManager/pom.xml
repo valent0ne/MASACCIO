@@ -95,7 +95,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>it.univaq.mosaccio.sensorManager.Main</mainClass>
+                            <mainClass>it.univaq.masaccio.sensorManager.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
