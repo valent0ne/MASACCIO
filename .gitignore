@@ -90,3 +90,5 @@ implementation/sensorManager/target/classes/
 implementation/sensorManager/target/maven-archiver/
 
 implementation/sensorManager/target/maven-status/maven-compiler-plugin/compile/default-compile/
+
+\.DS_Store
