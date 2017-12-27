@@ -1,4 +1,4 @@
-package it.univaq.mosaccio.sensorManager;
+package it.univaq.masaccio.sensorManager;
 
 //import util.properties packages
 import java.text.SimpleDateFormat;
@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class SensorManager {
     private final Properties kafkaProps;
@@ -26,9 +28,21 @@ public class SensorManager {
     public SensorManager(){
         // kafka properties attribute
         this.kafkaProps = new Properties();
+        kafkaProps.put(ProducerConfig.CLIENT_ID_CONFIG, Main.properties.getProperty("sensor_id"));
         kafkaProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Main.properties.getProperty("kafka_address"));
         kafkaProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
         kafkaProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
+        // The Producer config property retries defaults to 0 and is the retry count if Producer does not get an ack from Kafka Broker LEADER.
+        // Set the number of retries
+        kafkaProps.put(ProducerConfig.RETRIES_CONFIG, 5);
+
+        // ALL THIS TO MANAGE MORE "BROKER": REPLICHE DEL LEADER
+
+        // Setting this to 1 guarantee that messages will be written to the broker in the order in
+        // which they were sent, even when retries occur.
+        kafkaProps.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION,1);
+        // We have to receive the leader ack in order to know that the message was written in a right way to the .
+        //kafkaProps.put(ProducerConfig.ACKS_CONFIG, "1");
         this.producer = new KafkaProducer<>(kafkaProps);
     }
 
@@ -47,11 +61,13 @@ public class SensorManager {
         return message;
     }
 
-    public void send(String data){
+    public void send(String data) throws ExecutionException, InterruptedException {
+        // This method add the record ot the output buffer. By default is asynchronous.
         ProducerRecord<String, String> record = new ProducerRecord<>(this.topicName, null, data);
         try {
             LOGGER.info("publishing message on topic {} ...", Main.properties.getProperty("kafka_topic"));
-            producer.send(record);
+            //  The send method is asynchronous and returns right away as soon as the record gets added to the send buffer.
+            Future<RecordMetadata> f = producer.send(record, new DemoProducerCallback());
             LOGGER.info("message published");
         }
         catch (KafkaException e) {
@@ -62,3 +78,23 @@ public class SensorManager {
         }
     }
 }
+
+class DemoProducerCallback implements Callback {
+
+    /* To use callbacks, we need a class that implements the org.apache.kafka. clients.producer.Callback interface,
+    which has a single function—onComple tion().
+     */
+    @Override
+    public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+        //The callback gets invoked when the broker has acknowledged the send.
+        if (e != null) { // if the exception is not-null
+
+            //TODO MANAGING EXCEPTION
+            // direi di inviare su un altro broker..
+            e.printStackTrace();
+
+        }
+        else {
+            System.out.println("MESSAGE SENT");
+        }
+    } }

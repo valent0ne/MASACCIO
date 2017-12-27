@@ -1,4 +1,4 @@
-package it.univaq.mosaccio.sensorManager;
+package it.univaq.masaccio.sensorManager;
 
 
 import com.beust.jcommander.JCommander;
@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static it.univaq.mosaccio.sensorManager.Utils.readProperties;
@@ -28,7 +29,7 @@ public class Main {
     public static Properties properties;
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         Main main = new Main();
         JCommander jc = JCommander.newBuilder()
                 .addObject(main)
@@ -61,7 +62,7 @@ public class Main {
     }
 
 
-    private void run() {
+    private void run() throws ExecutionException, InterruptedException {
         // initialize the kafka producer
         SensorManager p = new SensorManager();
         while (true) {
