@@ -93,11 +93,13 @@ public class ConsumerManager {
      * @param pollSize size of the single poll
      */
     public void consume(Integer pollSize){
+        // take the time
         long startTime = System.currentTimeMillis();
         Integer refresh_time = Integer.parseInt(Main.properties.getProperty("refresh_time"));
         try {
             mongo.init();
             while(true) {
+                // take the time
                 long estimatedTime = System.currentTimeMillis() - startTime;
                 if (estimatedTime > refresh_time){
                     throw new TimeoutException("timeout reached, refreshing...");
