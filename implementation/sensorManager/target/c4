@@ -1,0 +1,4 @@
+kafka_address=192.168.43.185:9092
+kafka_topic=a1.4
+sensor_id=4
+interval=15
