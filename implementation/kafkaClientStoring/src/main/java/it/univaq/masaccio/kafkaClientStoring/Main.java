@@ -62,10 +62,10 @@ public class Main {
      * main function
      */
     private void run() {
-        //create the consumermanager object specifying address and group
-        ConsumerManager c = new ConsumerManager(properties.getProperty("kafka_address"), properties.getProperty("kafka_group"));
-        // after refresh_time the consumption will be broken and then restarted
         while(true){
+            //create the consumermanager object specifying address and group
+            ConsumerManager c = new ConsumerManager(properties.getProperty("kafka_address"), properties.getProperty("kafka_group"));
+            // after refresh_time the consumption will be broken and then restarted
             //subscribe to all the area topics
             c.subscribe();
             //start consumption

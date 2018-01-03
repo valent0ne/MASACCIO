@@ -46,7 +46,6 @@ public class ActuationManager {
 
         try {
             LOGGER.info("subscribing...");
-            LOGGER.info("PIPPO: {}", topic);
             this.consumer.subscribe(Collections.singletonList(topic));
             LOGGER.info("subscribed");
 

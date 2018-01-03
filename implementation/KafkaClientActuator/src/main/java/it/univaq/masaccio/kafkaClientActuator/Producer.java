@@ -22,7 +22,6 @@ import java.util.concurrent.Future;
     public class Producer {
         private final Properties kafkaProps;
         private KafkaProducer<String, String> producer;
-        private String topicName;
 
         //logger
         private static final Logger LOGGER = LoggerFactory.getLogger(Producer.class);
@@ -30,7 +29,6 @@ import java.util.concurrent.Future;
         public Producer(){
             // kafka properties attribute
             this.kafkaProps = new Properties();
-            kafkaProps.put(ProducerConfig.CLIENT_ID_CONFIG, Main.properties.getProperty("publisher_id"));
             kafkaProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Main.properties.getProperty("kafka_address"));
             kafkaProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
             kafkaProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
@@ -53,7 +51,7 @@ import java.util.concurrent.Future;
             // This method add the record ot the output buffer. By default is asynchronous.
             ProducerRecord<String, String> record = new ProducerRecord<>(t, null, data);
             try {
-                LOGGER.info("publishing message on topic {} ...", Main.properties.getProperty("kafka_topic"));
+                LOGGER.info("publishing message on topic {} ...", t);
                 //  The send method is asynchronous and returns right away as soon as the record gets added to the send buffer.
                 producer.send(record, new ProducerCallback());
                 LOGGER.info("message published");
@@ -69,6 +67,9 @@ import java.util.concurrent.Future;
 
     class ProducerCallback implements Callback {
 
+        //logger
+        private static final Logger LOGGER = LoggerFactory.getLogger(ProducerCallback.class);
+
         /* To use callbacks, we need a class that implements the org.apache.kafka. clients.producer.Callback interface,
         which has a single function—onComple tion().
          */
@@ -83,7 +84,7 @@ import java.util.concurrent.Future;
 
             }
             else {
-                System.out.println("MESSAGE SENT");
+                LOGGER.info("Triggering message sent.");
             }
         } }
 
