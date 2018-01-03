@@ -116,7 +116,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>it.univaq.masaccio.kafkaClientStoring.Main</mainClass>
+                            <mainClass>it.univaq.masaccio.ActuationManager.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

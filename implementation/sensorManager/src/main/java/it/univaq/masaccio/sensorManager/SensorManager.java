@@ -49,10 +49,10 @@ public class SensorManager {
 
     public String sense(){
         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(new Date());
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        String SALTCHARS = "1234567890";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
-        while (salt.length() < 18) { // length of the random string.
+        while (salt.length() < 4) { // length of the random string.
             int index = (int) (rnd.nextFloat() * SALTCHARS.length());
             salt.append(SALTCHARS.charAt(index));
         }
@@ -67,7 +67,7 @@ public class SensorManager {
         try {
             LOGGER.info("publishing message on topic {} ...", Main.properties.getProperty("kafka_topic"));
             //  The send method is asynchronous and returns right away as soon as the record gets added to the send buffer.
-            Future<RecordMetadata> f = producer.send(record, new DemoProducerCallback());
+            producer.send(record, new ProducerCallback());
             LOGGER.info("message published");
         }
         catch (KafkaException e) {
@@ -79,7 +79,7 @@ public class SensorManager {
     }
 }
 
-class DemoProducerCallback implements Callback {
+class ProducerCallback implements Callback {
 
     /* To use callbacks, we need a class that implements the org.apache.kafka. clients.producer.Callback interface,
     which has a single function—onComple tion().

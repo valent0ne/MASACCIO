@@ -36,6 +36,8 @@ public class ConsumerManager {
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, address);
         // we set here the group id
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        // disable the autocommit
+        properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         // we set here values about the deserializer
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
@@ -97,6 +99,7 @@ public class ConsumerManager {
         long startTime = System.currentTimeMillis();
         Integer refresh_time = Integer.parseInt(Main.properties.getProperty("refresh_time"));
         try {
+            // if there isn't the mongo connection will fail and will not consume the data.
             mongo.init();
             while(true) {
                 // take the time
@@ -109,7 +112,8 @@ public class ConsumerManager {
                 for (ConsumerRecord<String, String> record : records) {
                     LOGGER.info("consumed record: (topic = {}, partition = {}, offset = {}, key = {}, value = {})\n", record.topic(), record.partition(), record.offset(), record.key(), record.value());
                     mongo.insert(record.value(), record.topic());
-                    // TODO check autocommit
+                    // in order to say "ok, we saved"
+                    consumer.commitAsync();
                 }
             }
 
@@ -119,6 +123,7 @@ public class ConsumerManager {
         } finally{
             consumer.close();
             try {
+                // I close mongo connection otherwise when the process restart will open the 2° connection
                 mongo.close();
             } catch (Exception e) {
                 LOGGER.error(e.getMessage());

@@ -1,10 +1,6 @@
 package it.univaq.masaccio.ActuationManager;
 
-import it.univaq.masaccio.ActuationManager.dao.implementation.MasaccioDaoMongoDBImpl;
-import it.univaq.masaccio.ActuationManager.dao.implementation.MasaccioDaoMySQLImpl;
-import it.univaq.masaccio.ActuationManager.dao.interfaces.MasaccioDaoMongoDB;
-import it.univaq.masaccio.ActuationManager.dao.interfaces.MasaccioDaoMySQL;
-import it.univaq.masaccio.ActuationManager.model.Area;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -27,8 +23,7 @@ public class ActuationManager {
 
     private KafkaConsumer<String, String> consumer;
     private Properties properties;
-    private MasaccioDaoMongoDB mongo;
-    private MasaccioDaoMySQL mysql;
+
 
     public ActuationManager(String address, String groupId){
         // create new properties kafka object
@@ -40,8 +35,6 @@ public class ActuationManager {
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 
-        this.mongo = new MasaccioDaoMongoDBImpl();
-        this.mysql = new MasaccioDaoMySQLImpl();
 
     }
 
@@ -69,12 +62,33 @@ public class ActuationManager {
     public void consume(Integer pollSize){
         //TODO
 
-        // do something
-        this.actuation();
 
-    }
+        try {
+            // if there isn't the mongo connection will fail and will not consume the data.
+            while(true) {
+                // poll return a list of records: Each record contains the topic and partition the record came from
+                ConsumerRecords<String, String> records = this.consumer.poll(pollSize);
+                for (ConsumerRecord<String, String> record : records) {
+                    LOGGER.info("consumed record: (topic = {}, partition = {}, offset = {}, key = {}, value = {})\n", record.topic(), record.partition(), record.offset(), record.key(), record.value());
+                    // in order to say "ok, we saved"
+                    // do something
+                    this.actuation(record.value());
+                    consumer.commitAsync();
+                }
+            }
 
-    public void actuation(){
+        } catch (Exception e) {
+            LOGGER.error("Exception in record consumption - {}", e.getMessage());
+
+        } finally{
+            consumer.close();
+            }
+        }
+
+
+
+    public void actuation(String value){
+        LOGGER.info("Actuator triggered by value: {}", value);
         //TODO do something
     }
 }
