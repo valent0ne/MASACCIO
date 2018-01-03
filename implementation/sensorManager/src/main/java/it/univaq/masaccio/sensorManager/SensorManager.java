@@ -68,7 +68,6 @@ public class SensorManager {
             LOGGER.info("publishing message on topic {} ...", Main.properties.getProperty("kafka_topic"));
             //  The send method is asynchronous and returns right away as soon as the record gets added to the send buffer.
             producer.send(record, new ProducerCallback());
-            LOGGER.info("message published");
         }
         catch (KafkaException e) {
             LOGGER.error("Exception while publishing - {}", e.getMessage());
@@ -80,6 +79,10 @@ public class SensorManager {
 }
 
 class ProducerCallback implements Callback {
+
+
+    //logger
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProducerCallback.class);
 
     /* To use callbacks, we need a class that implements the org.apache.kafka. clients.producer.Callback interface,
     which has a single function—onComple tion().
@@ -95,6 +98,6 @@ class ProducerCallback implements Callback {
 
         }
         else {
-            System.out.println("MESSAGE SENT");
+            LOGGER.info("message published");
         }
     } }
