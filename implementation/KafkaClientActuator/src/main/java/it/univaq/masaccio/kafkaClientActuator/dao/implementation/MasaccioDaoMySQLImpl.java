@@ -34,7 +34,7 @@ public class MasaccioDaoMySQLImpl extends DaoDataMySQLImpl implements MasaccioDa
     public void init() throws DaoException {
         try{
             super.init();
-            this.getAreas = connection.prepareStatement("SELECT areas.name AS name FROM areas LEFT JOIN actuators ON areas.id = actuators.area");
+            this.getAreas = connection.prepareStatement("SELECT areas.name AS name FROM actuators LEFT JOIN areas ON areas.id = actuators.area");
             this.getSensors = connection.prepareStatement("SELECT * FROM sensors_actuators");
         }catch (Exception e){
             throw new DaoException("Cannot initialize MosaccioDaoMySQL", e);

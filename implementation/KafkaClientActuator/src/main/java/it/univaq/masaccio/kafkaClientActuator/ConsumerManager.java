@@ -41,8 +41,8 @@ public class ConsumerManager {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 
         this.consumer = new KafkaConsumer<>(properties);
-        this.sensors = getSensors();
         this.mysql = new MasaccioDaoMySQLImpl();
+        this.sensors = this.getSensors();
 
     }
 
@@ -82,20 +82,30 @@ public class ConsumerManager {
             this.mysql.close(); // to close the connection
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
+            if (LOGGER.isDebugEnabled()){
+                e.printStackTrace();
+            }
         }
         return out;
     }
 
-
+    /**
+     * retrieves the list of the sensors-actuators associations from the relational db
+     * @return hashmap of the tuples
+     */
     private Map<Integer, Integer> getSensors() {
         Map<Integer, Integer> out = new HashMap<>();
         try {
             this.mysql.init(); // to init the connection with sql DB
             out = this.mysql.getSensors();
             LOGGER.info("fetched sensors");
+            for(Map.Entry<Integer, Integer> entry : out.entrySet()) {
+                LOGGER.info("sensor {} -> actuator {}", entry.getKey(), entry.getValue());
+            }
             this.mysql.close(); // to close the connection
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("Exception while retrieving the sensors list {}",e.getMessage());
+            e.printStackTrace();
         }
         return out;
     }
@@ -124,11 +134,11 @@ public class ConsumerManager {
                 for (ConsumerRecord<String, String> record : records) {
                     LOGGER.info("consumed record: (topic = {}, partition = {}, offset = {}, key = {}, value = {})\n", record.topic(), record.partition(), record.offset(), record.key(), record.value());
                     Document doc = Document.parse(record.value());
-                    Integer s_id =  (Integer)doc.get("id");
+                    Integer s_id =  Integer.parseInt(doc.get("id").toString());
                     Integer id_act = this.sensors.get(s_id);
                     // we trigger the actuator by publishing on its topic
                     this.producer.send(id_act.toString(), "Trigger");
-                    LOGGER.info("{} triggered by {}", id_act,s_id);
+                    LOGGER.info("actuator {} triggered by sensor {}", id_act,s_id);
 
                     // in order to say "ok, we saved"
                     consumer.commitAsync();
