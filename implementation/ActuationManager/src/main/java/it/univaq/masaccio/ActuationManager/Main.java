@@ -5,6 +5,7 @@ import com.beust.jcommander.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -58,21 +59,15 @@ public class Main {
      * main function
      */
     private void run() {
-        // initialize topic list
-        List<String> topic = null;
-        topic.add(properties.getProperty("kafka_topic"));
 
         //create the consumermanager object specifying address and group
         ActuationManager c = new ActuationManager(properties.getProperty("kafka_address"), properties.getProperty("kafka_group"));
         // after refresh_time the consumption will be broken and then restarted
         while(true){
             //subscribe to all the area topics
-            c.subscribe(topic);
+            c.subscribe(properties.getProperty("kafka_topic"));
             //start consumption
             c.consume(Integer.parseInt(properties.getProperty("kafka_poll_size")));
         }
-
-
     }
-
 }

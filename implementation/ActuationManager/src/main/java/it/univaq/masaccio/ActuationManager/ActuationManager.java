@@ -1,17 +1,15 @@
 package it.univaq.masaccio.ActuationManager;
 
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.KafkaException;
-import org.apache.kafka.common.errors.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -34,7 +32,7 @@ public class ActuationManager {
         // we set here values about the deserializer
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-
+        this.consumer = new KafkaConsumer<>(properties);
 
     }
 
@@ -44,11 +42,12 @@ public class ActuationManager {
     /**
      * subscribe to the topics 
      */
-    public void subscribe(List topic){
+    public void subscribe(String topic){
 
         try {
             LOGGER.info("subscribing...");
-            this.consumer.subscribe(topic);
+            LOGGER.info("PIPPO: {}", topic);
+            this.consumer.subscribe(Collections.singletonList(topic));
             LOGGER.info("subscribed");
 
         } catch (KafkaException e) {

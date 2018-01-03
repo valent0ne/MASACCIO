@@ -71,7 +71,7 @@ public class Main {
             p.send(p.sense());
 
             try {
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.SECONDS.sleep(Integer.parseInt(properties.getProperty("interval")));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

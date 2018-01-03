@@ -28,7 +28,6 @@ public class SensorManager {
     public SensorManager(){
         // kafka properties attribute
         this.kafkaProps = new Properties();
-        kafkaProps.put(ProducerConfig.CLIENT_ID_CONFIG, Main.properties.getProperty("sensor_id"));
         kafkaProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Main.properties.getProperty("kafka_address"));
         kafkaProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
         kafkaProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
@@ -49,14 +48,8 @@ public class SensorManager {
 
     public String sense(){
         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(new Date());
-        String SALTCHARS = "1234567890";
-        StringBuilder salt = new StringBuilder();
-        Random rnd = new Random();
-        while (salt.length() < 4) { // length of the random string.
-            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-            salt.append(SALTCHARS.charAt(index));
-        }
-        String message = "{ 'id':'"+Main.properties.getProperty("sensor_id")+"', 'value':'"+salt.toString()+"', 'timestamp':'"+timestamp+"'}";
+        double random = Math.random() * 100 + 1;
+        String message = "{ 'id':'"+Main.properties.getProperty("sensor_id")+"', 'value':'"+random+"', 'timestamp':'"+timestamp+"'}";
         LOGGER.info("payload: {}", message);
         return message;
     }
