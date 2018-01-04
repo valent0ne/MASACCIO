@@ -26,7 +26,7 @@ public class ConsumerManager {
     private Properties properties;
     private MasaccioDaoMySQL mysql;
     private Map<Integer, Integer> sensors;
-    private Producer producer =new Producer();
+    private ProducerManager producerManager =new ProducerManager();
 
     public ConsumerManager(String address, String groupId){
         // create new properties kafka object
@@ -137,7 +137,7 @@ public class ConsumerManager {
                     Integer s_id =  Integer.parseInt(doc.get("id").toString());
                     Integer id_act = this.sensors.get(s_id);
                     // we trigger the actuator by publishing on its topic
-                    this.producer.send(id_act.toString(), "Trigger");
+                    this.producerManager.send(id_act.toString(), "Trigger");
                     LOGGER.info("actuator {} triggered by sensor {}", id_act,s_id);
 
                     // in order to say "ok, we saved"

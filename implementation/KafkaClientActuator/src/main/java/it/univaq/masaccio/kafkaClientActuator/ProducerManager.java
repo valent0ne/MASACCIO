@@ -1,32 +1,27 @@
 package it.univaq.masaccio.kafkaClientActuator;
 
 //import util.properties packages
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.Properties;
 
 //import KafkaProducer packages
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.KafkaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 
 
-    public class Producer {
+    public class ProducerManager {
         private final Properties kafkaProps;
         private KafkaProducer<String, String> producer;
 
         //logger
-        private static final Logger LOGGER = LoggerFactory.getLogger(Producer.class);
+        private static final Logger LOGGER = LoggerFactory.getLogger(ProducerManager.class);
 
-        public Producer(){
+        public ProducerManager(){
             // kafka properties attribute
             this.kafkaProps = new Properties();
             kafkaProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Main.properties.getProperty("kafka_address"));
