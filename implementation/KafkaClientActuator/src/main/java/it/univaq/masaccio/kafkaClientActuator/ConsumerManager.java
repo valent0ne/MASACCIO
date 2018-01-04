@@ -136,6 +136,9 @@ public class ConsumerManager {
                     Document doc = Document.parse(record.value());
                     Integer s_id =  Integer.parseInt(doc.get("id").toString());
                     Integer id_act = this.sensors.get(s_id);
+                    if (id_act == null){
+                        continue;
+                    }
                     // we trigger the actuator by publishing on its topic
                     this.producerManager.send(id_act.toString(), "Trigger");
                     LOGGER.info("actuator {} triggered by sensor {}", id_act,s_id);
