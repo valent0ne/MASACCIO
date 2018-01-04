@@ -1,7 +1,8 @@
 package it.univaq.masaccio.kafkaClientStoring.dao.implementation;
 
 
-import com.mongodb.client.MongoCollection;
+import com.mongodb.async.SingleResultCallback;
+import com.mongodb.async.client.MongoCollection;
 import it.univaq.masaccio.kafkaClientStoring.dao.interfaces.MasaccioDaoMongoDB;
 import it.univaq.masaccio.kafkaClientStoring.dao.data.DaoDataMongoDBImpl;
 import org.bson.Document;
@@ -31,8 +32,13 @@ public class MasaccioDaoMongoDBImpl extends DaoDataMongoDBImpl implements Masacc
             LOGGER.info("inserting value to collection {}", collection);
             MongoCollection<Document> c = this.dataBase.getCollection(collection);
             Document doc = Document.parse(value);
-            c.insertOne(doc);
-            LOGGER.info("value inserted");
+            // async insertion
+            c.insertOne(doc, new SingleResultCallback<Void>() {
+                @Override
+                public void onResult(final Void result, final Throwable t) {
+                    LOGGER.info("value inserted");
+                }
+            });
         }catch (Exception e){
             LOGGER.error("cannot insert to mongo - {}", e.getMessage());
             if(LOGGER.isDebugEnabled()){
