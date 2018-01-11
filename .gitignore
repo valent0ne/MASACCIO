@@ -92,3 +92,7 @@ implementation/sensorManager/target/maven-archiver/
 implementation/sensorManager/target/maven-status/maven-compiler-plugin/compile/default-compile/
 
 \.DS_Store
+
+documentation/UML/Architecture/Thumbs\.db
+
+documentation/CAPS/SAML/Thumbs\.db
