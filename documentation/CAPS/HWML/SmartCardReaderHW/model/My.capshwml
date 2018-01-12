@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filesystem:NodeSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:filesystem="filesystem">
+  <nodes name="R10-900N" OS="not specified" middleware="" macProtocol="not specified" routingProtocol="not specified" transportProtocol="OSDP - via RS485">
+    <energySources xsi:type="filesystem:ContinuousEnergySource" name="wall/POE"/>
+    <RfidReaders name="RFID reader" energyConsumptionPerSample="0.96" idleEnergyConsumption="0.016"/>
+    <modes name="standard"/>
+    <modes name="IPM (Intelligent Power Management)"/>
+    <modes name="NSC standard"/>
+    <modes name="NSC IPM"/>
+    <microcontroller name="Propietary Microcontroller">
+      <processors name="CPU - EAL5+ rated" frequency="900"/>
+      <memory name="RAM" size="1024"/>
+    </microcontroller>
+    <rFCommunicationDevices name="reader antenna" frequency="13.56"/>
+  </nodes>
+</filesystem:NodeSpecification>

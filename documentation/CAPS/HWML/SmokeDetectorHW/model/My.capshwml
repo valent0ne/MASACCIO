@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filesystem:NodeSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:filesystem="filesystem">
+  <nodes name="FAAST XT Pro" OS="not specified" macProtocol="not specified" routingProtocol="not specified" transportProtocol="DHCP, SMTP, HHTP, MODEBUS/TCP, AutoIP, NetBIOS-NS, Serial MODBUS">
+    <energySources xsi:type="filesystem:ContinuousEnergySource" name="wall"/>
+    <GasSmokeDetectors energyConsumptionPerSample="12.0" idleEnergyConsumption="12.0"/>
+    <modes name="active"/>
+    <microcontroller name="Proprietary Microcontroller">
+      <processors name=" CPU" frequency="900"/>
+      <timers name="timer"/>
+      <memory name="RAM" size="1024"/>
+    </microcontroller>
+    <additionalMemories xsi:type="filesystem:StorageMemory" name="Storage" size="65536"/>
+  </nodes>
+</filesystem:NodeSpecification>

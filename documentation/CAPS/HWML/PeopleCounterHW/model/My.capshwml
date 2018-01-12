@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filesystem:NodeSpecification xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:filesystem="filesystem">
+  <nodes name="FootfallCam 3D Plus" OS="Footfall Counter OS" middleware="" macProtocol="not speciefied" routingProtocol="not specified" transportProtocol="HTTP/HTTPS">
+    <energySources xsi:type="filesystem:ContinuousEnergySource" name="wall/POE"/>
+    <PeopleCounters name="PeopleCounter" energyConsumptionPerSample="6.0" idleEnergyConsumption="6.0"/>
+    <modes name="standard - POE"/>
+    <microcontroller name="Propietary Microcontroller">
+      <processors name="CPU" frequency="900"/>
+      <memory name="RAM" size="1024"/>
+    </microcontroller>
+    <additionalMemories xsi:type="filesystem:StorageMemory" name="Micro SD" size="8192" type="archive"/>
+  </nodes>
+</filesystem:NodeSpecification>
