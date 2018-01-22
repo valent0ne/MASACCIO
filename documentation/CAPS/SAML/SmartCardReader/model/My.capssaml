@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components:SoftwareArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:components="components">
+  <SAElements xsi:type="components:Component" name="SmartCardReader" ClientOrServer="client">
+    <ports xsi:type="components:OutMessagePort"/>
+    <modes xsi:type="components:InitialMode" name="Sense">
+      <behaviouralElements xsi:type="components:SmartCard" outgoing="//@SAElements.0/@modes.0/@behaviouralElements.2"/>
+      <behaviouralElements xsi:type="components:ReadSmartCard" name="Read" outgoing="//@SAElements.0/@modes.0/@behaviouralElements.4" incoming="//@SAElements.0/@modes.0/@behaviouralElements.2" dataDeclarationName="user_id" data="user_id" dataRecipient="//@SAElements.0/@applicationData.0"/>
+      <behaviouralElements xsi:type="components:Link" source="//@SAElements.0/@modes.0/@behaviouralElements.0" target="//@SAElements.0/@modes.0/@behaviouralElements.1"/>
+      <behaviouralElements xsi:type="components:UnicastSendMessage" name="" incoming="//@SAElements.0/@modes.0/@behaviouralElements.4" data="user_id" toMessagePorts="//@SAElements.0/@ports.0" dataRecipient="//@SAElements.0/@applicationData.0"/>
+      <behaviouralElements xsi:type="components:Link" source="//@SAElements.0/@modes.0/@behaviouralElements.1" target="//@SAElements.0/@modes.0/@behaviouralElements.3"/>
+    </modes>
+    <applicationData xsi:type="components:PrimitiveDataDeclaration" dataName="user_id" value="null"/>
+  </SAElements>
+  <SAElements xsi:type="components:Component" name="SensorManager">
+    <ports xsi:type="components:InMessagePort"/>
+    <ports xsi:type="components:OutMessagePort"/>
+    <modes xsi:type="components:InitialMode" name="Fetch&amp;Send">
+      <behaviouralElements xsi:type="components:ReceiveMessage" name="fetch_from_sensor" outgoing="//@SAElements.1/@modes.0/@behaviouralElements.2" dataRecipientName="value" fromMessagePorts="//@SAElements.1/@ports.0" dataRecipient="//@SAElements.1/@applicationData.1"/>
+      <behaviouralElements xsi:type="components:UnicastSendMessage" incoming="//@SAElements.1/@modes.0/@behaviouralElements.2" data="message" toMessagePorts="//@SAElements.1/@ports.1" dataRecipient="//@SAElements.1/@applicationData.3"/>
+      <behaviouralElements xsi:type="components:Link" name="" source="//@SAElements.1/@modes.0/@behaviouralElements.0" target="//@SAElements.1/@modes.0/@behaviouralElements.1" condition="message=[value, id_sensor, timestamp]"/>
+    </modes>
+    <applicationData xsi:type="components:PrimitiveDataDeclaration" dataName="timestamp" value="current_time()" type="string"/>
+    <applicationData xsi:type="components:PrimitiveDataDeclaration" dataName="value" value="null"/>
+    <applicationData xsi:type="components:PrimitiveDataDeclaration" dataName="id_sensor" value="configuration.getSensorId()"/>
+    <applicationData xsi:type="components:PrimitiveDataDeclaration" dataName="message" value="&quot;&quot;" type="string"/>
+  </SAElements>
+  <SAElements xsi:type="components:Connection" source="//@SAElements.0/@ports.0" target="//@SAElements.1/@ports.0"/>
+</components:SoftwareArchitecture>

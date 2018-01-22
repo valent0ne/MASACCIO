@@ -1,0 +1,11 @@
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/dao/exception/DaoException.java
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/dao/data/DaoDataMongoDBImpl.java
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/dao/data/DaoDataMySQLImpl.java
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/dao/implementation/MasaccioDaoMySQLImpl.java
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/Main.java
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/ConsumerManager.java
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/dao/interfaces/MasaccioDaoMySQL.java
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/Utils.java
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/model/Area.java
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/dao/data/DaoData.java
+/Users/valent0ne/Projects/MASACCIO/implementation/KafkaClientActuator/src/main/java/it/univaq/masaccio/kafkaClientActuator/Producer.java

@@ -100,3 +100,9 @@ documentation/UML/Architecture/Thumbs\.db
 documentation/CAPS/SAML/Thumbs\.db
 
 documentation/~\$liverableTemplate-SA2017-2018_D3_v2\.rtf
+
+implementation/rest/\.idea/
+
+implementation/rest/target/
+
+implementation/rest/it\.univaq\.masaccio\.rest\.iml

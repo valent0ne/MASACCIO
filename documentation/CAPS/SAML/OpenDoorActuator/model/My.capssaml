@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components:SoftwareArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:components="components">
+  <SAElements xsi:type="components:Component" name="ActuationManager">
+    <ports xsi:type="components:InMessagePort"/>
+    <ports xsi:type="components:OutMessagePort"/>
+    <modes xsi:type="components:InitialMode" name="Fetch&amp;Send">
+      <behaviouralElements xsi:type="components:ReceiveMessage" name="recive_trigger_from_KfakaCluster" outgoing="//@SAElements.0/@modes.0/@behaviouralElements.2" dataRecipientName="message" fromMessagePorts="//@SAElements.0/@ports.0" dataRecipient="//@SAElements.0/@applicationData.0"/>
+      <behaviouralElements xsi:type="components:UnicastSendMessage" incoming="//@SAElements.0/@modes.0/@behaviouralElements.2" data="trigger" toMessagePorts="//@SAElements.0/@ports.1" dataRecipient="//@SAElements.0/@applicationData.1"/>
+      <behaviouralElements xsi:type="components:Link" name="" source="//@SAElements.0/@modes.0/@behaviouralElements.0" target="//@SAElements.0/@modes.0/@behaviouralElements.1" condition=""/>
+    </modes>
+    <applicationData xsi:type="components:PrimitiveDataDeclaration" dataName="message" value="&quot;&quot;" type="string"/>
+    <applicationData xsi:type="components:PrimitiveDataDeclaration" dataName="trigger" value="&quot;&quot;" type="string"/>
+  </SAElements>
+  <SAElements xsi:type="components:Component" name="DoorLockActuator">
+    <ports xsi:type="components:InMessagePort"/>
+    <modes xsi:type="components:InitialMode" name="Execute Open Door">
+      <behaviouralElements xsi:type="components:ReceiveMessage" name="message_recived" outgoing="//@SAElements.1/@modes.0/@behaviouralElements.2" dataRecipientName="activate_trigger" fromMessagePorts="//@SAElements.1/@ports.0" dataRecipient="//@SAElements.1/@applicationData.0"/>
+      <behaviouralElements xsi:type="components:Join" outgoing="//@SAElements.1/@modes.0/@behaviouralElements.5 //@SAElements.1/@modes.0/@behaviouralElements.6" incoming="//@SAElements.1/@modes.0/@behaviouralElements.2"/>
+      <behaviouralElements xsi:type="components:Link" source="//@SAElements.1/@modes.0/@behaviouralElements.0" target="//@SAElements.1/@modes.0/@behaviouralElements.1"/>
+      <behaviouralElements xsi:type="components:Actuate" name="door lock actuator" incoming="//@SAElements.1/@modes.0/@behaviouralElements.6 //@SAElements.1/@modes.0/@behaviouralElements.8" data=""/>
+      <behaviouralElements xsi:type="components:StartTimer" name="openTimer" incoming="//@SAElements.1/@modes.0/@behaviouralElements.5" delay="1000"/>
+      <behaviouralElements xsi:type="components:Link" source="//@SAElements.1/@modes.0/@behaviouralElements.1" target="//@SAElements.1/@modes.0/@behaviouralElements.4"/>
+      <behaviouralElements xsi:type="components:Link" source="//@SAElements.1/@modes.0/@behaviouralElements.1" target="//@SAElements.1/@modes.0/@behaviouralElements.3" condition="enable"/>
+      <behaviouralElements xsi:type="components:TimerFired" outgoing="//@SAElements.1/@modes.0/@behaviouralElements.8"/>
+      <behaviouralElements xsi:type="components:Link" source="//@SAElements.1/@modes.0/@behaviouralElements.7" target="//@SAElements.1/@modes.0/@behaviouralElements.3" condition="disable"/>
+    </modes>
+    <applicationData xsi:type="components:PrimitiveDataDeclaration" dataName="activate_trigger" value="&quot;active&quot;" type="string"/>
+  </SAElements>
+  <SAElements xsi:type="components:Connection" source="//@SAElements.0/@ports.1" target="//@SAElements.1/@ports.0"/>
+</components:SoftwareArchitecture>
