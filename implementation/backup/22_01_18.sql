@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Jan 22, 2018 at 06:15 PM
+-- Generation Time: Jan 22, 2018 at 06:38 PM
 -- Server version: 5.6.35
 -- PHP Version: 7.1.8
 
@@ -167,7 +167,7 @@ CREATE TABLE `groups_services` (
 
 CREATE TABLE `sensors` (
   `id` int(11) NOT NULL,
-  `descrption` text NOT NULL,
+  `description` text NOT NULL,
   `max_bound` varchar(128) NOT NULL,
   `min_bound` varchar(128) NOT NULL,
   `position` varchar(128) NOT NULL,
@@ -181,7 +181,7 @@ CREATE TABLE `sensors` (
 -- Dumping data for table `sensors`
 --
 
-INSERT INTO `sensors` (`id`, `descrption`, `max_bound`, `min_bound`, `position`, `latitude`, `longitude`, `elevation`, `area`) VALUES
+INSERT INTO `sensors` (`id`, `description`, `max_bound`, `min_bound`, `position`, `latitude`, `longitude`, `elevation`, `area`) VALUES
 (1, '', '', '', '', '', '', '', 1),
 (2, '', '', '', '', '', '', '', 2),
 (3, '', '', '', '', '', '', '', 3),
