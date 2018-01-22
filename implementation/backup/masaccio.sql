@@ -2,8 +2,8 @@
 -- version 4.7.3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Dec 20, 2017 at 04:16 PM
+-- Host: localhost:8889
+-- Generation Time: Jan 22, 2018 at 06:15 PM
 -- Server version: 5.6.35
 -- PHP Version: 7.1.8
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `mosaccio`
+-- Database: `masaccio`
 --
 
 -- --------------------------------------------------------
@@ -30,7 +30,30 @@ CREATE TABLE `actuators` (
   `id` int(11) NOT NULL,
   `description` text NOT NULL,
   `position` varchar(128) NOT NULL,
+  `latitude` varchar(128) NOT NULL,
+  `longitude` varchar(128) NOT NULL,
+  `elevation` varchar(128) NOT NULL,
   `area` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `actuators`
+--
+
+INSERT INTO `actuators` (`id`, `description`, `position`, `latitude`, `longitude`, `elevation`, `area`) VALUES
+(1, '', '', '', '', '', 4),
+(2, '', '', '', '', '', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `actuators_events`
+--
+
+CREATE TABLE `actuators_events` (
+  `id` int(11) NOT NULL,
+  `id_event` int(11) NOT NULL,
+  `id_actuator` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -45,21 +68,19 @@ CREATE TABLE `areas` (
   `description` text NOT NULL,
   `latitude` varchar(128) NOT NULL,
   `longitude` varchar(128) NOT NULL,
-  `group` int(11) NOT NULL
+  `elevation` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `areas`
 --
 
-INSERT INTO `areas` (`id`, `name`, `description`, `latitude`, `longitude`, `group`) VALUES
-(3, 'a1.1', '', '', '', 1),
-(4, 'a1.2', '', '', '', 1),
-(5, 'a1.3', '', '', '', 1),
-(6, 'a1.4', '', '', '', 1),
-(7, 'a1.5', '', '', '', 1),
-(8, 'a1.6', '', '', '', 1),
-(10, 'a1.7', '', '', '', 1);
+INSERT INTO `areas` (`id`, `name`, `description`, `latitude`, `longitude`, `elevation`) VALUES
+(1, 'a1.1', '', '', '', ''),
+(2, 'a1.2', '', '', '', ''),
+(3, 'a1.3', '', '', '', ''),
+(4, 'a1.4', '', '', '', ''),
+(5, 'a1.5', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -73,7 +94,22 @@ CREATE TABLE `cameras` (
   `max_bound` varchar(128) NOT NULL,
   `min_bound` varchar(128) NOT NULL,
   `position` varchar(128) NOT NULL,
+  `latitude` varchar(128) NOT NULL,
+  `longitude` varchar(128) NOT NULL,
+  `elevation` varchar(128) NOT NULL,
   `area` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cameras_actuators`
+--
+
+CREATE TABLE `cameras_actuators` (
+  `id` int(11) NOT NULL,
+  `id_camera` int(11) NOT NULL,
+  `id_actuator` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -83,21 +119,8 @@ CREATE TABLE `cameras` (
 --
 
 CREATE TABLE `events` (
-  `id` int(11) NOT NULL,
-  `description` text NOT NULL,
-  `datetime` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `generate_events`
---
-
-CREATE TABLE `generate_events` (
-  `id` int(11) NOT NULL,
-  `id_hw` int(11) NOT NULL,
-  `id_event` int(11) NOT NULL
+  `id_event` int(11) NOT NULL,
+  `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -112,12 +135,17 @@ CREATE TABLE `groups` (
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `groups`
+-- Table structure for table `groups_areas`
 --
 
-INSERT INTO `groups` (`id`, `name`, `description`) VALUES
-(1, 'admin', 'group of administrators');
+CREATE TABLE `groups_areas` (
+  `id` int(11) NOT NULL,
+  `id_group` int(11) NOT NULL,
+  `id_area` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -126,6 +154,7 @@ INSERT INTO `groups` (`id`, `name`, `description`) VALUES
 --
 
 CREATE TABLE `groups_services` (
+  `id` int(11) NOT NULL,
   `id_group` int(11) NOT NULL,
   `id_service` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -142,8 +171,42 @@ CREATE TABLE `sensors` (
   `max_bound` varchar(128) NOT NULL,
   `min_bound` varchar(128) NOT NULL,
   `position` varchar(128) NOT NULL,
+  `latitude` varchar(128) NOT NULL,
+  `longitude` varchar(128) NOT NULL,
+  `elevation` varchar(128) NOT NULL,
   `area` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `sensors`
+--
+
+INSERT INTO `sensors` (`id`, `descrption`, `max_bound`, `min_bound`, `position`, `latitude`, `longitude`, `elevation`, `area`) VALUES
+(1, '', '', '', '', '', '', '', 1),
+(2, '', '', '', '', '', '', '', 2),
+(3, '', '', '', '', '', '', '', 3),
+(4, '', '', '', '', '', '', '', 4),
+(5, '', '', '', '', '', '', '', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sensors_actuators`
+--
+
+CREATE TABLE `sensors_actuators` (
+  `id` int(11) NOT NULL,
+  `id_sensor` int(11) NOT NULL,
+  `id_actuator` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `sensors_actuators`
+--
+
+INSERT INTO `sensors_actuators` (`id`, `id_sensor`, `id_actuator`) VALUES
+(1, 4, 1),
+(2, 5, 2);
 
 -- --------------------------------------------------------
 
@@ -179,6 +242,7 @@ CREATE TABLE `users` (
 --
 
 CREATE TABLE `users_groups` (
+  `id` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `id_group` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -195,12 +259,19 @@ ALTER TABLE `actuators`
   ADD KEY `actuators_ibfk_1` (`area`);
 
 --
+-- Indexes for table `actuators_events`
+--
+ALTER TABLE `actuators_events`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_actuator` (`id_actuator`),
+  ADD KEY `id_event` (`id_event`);
+
+--
 -- Indexes for table `areas`
 --
 ALTER TABLE `areas`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`),
-  ADD KEY `areas_ibfk_1` (`group`);
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indexes for table `cameras`
@@ -210,18 +281,18 @@ ALTER TABLE `cameras`
   ADD KEY `videocameras_ibfk_1` (`area`);
 
 --
+-- Indexes for table `cameras_actuators`
+--
+ALTER TABLE `cameras_actuators`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_actuator` (`id_actuator`),
+  ADD KEY `id_camera` (`id_camera`);
+
+--
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `generate_events`
---
-ALTER TABLE `generate_events`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_event` (`id_event`),
-  ADD KEY `id_hw` (`id_hw`);
+  ADD PRIMARY KEY (`id_event`);
 
 --
 -- Indexes for table `groups`
@@ -230,10 +301,19 @@ ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `groups_areas`
+--
+ALTER TABLE `groups_areas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_area` (`id_area`),
+  ADD KEY `id_group` (`id_group`);
+
+--
 -- Indexes for table `groups_services`
 --
 ALTER TABLE `groups_services`
-  ADD PRIMARY KEY (`id_group`,`id_service`),
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_group` (`id_group`),
   ADD KEY `id_service` (`id_service`);
 
 --
@@ -242,6 +322,14 @@ ALTER TABLE `groups_services`
 ALTER TABLE `sensors`
   ADD PRIMARY KEY (`id`),
   ADD KEY `area` (`area`);
+
+--
+-- Indexes for table `sensors_actuators`
+--
+ALTER TABLE `sensors_actuators`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_actuator` (`id_actuator`),
+  ADD KEY `id_sensor` (`id_sensor`);
 
 --
 -- Indexes for table `services`
@@ -259,8 +347,9 @@ ALTER TABLE `users`
 -- Indexes for table `users_groups`
 --
 ALTER TABLE `users_groups`
-  ADD PRIMARY KEY (`id_user`,`id_group`),
-  ADD KEY `id_groups` (`id_group`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_group` (`id_group`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -270,37 +359,57 @@ ALTER TABLE `users_groups`
 -- AUTO_INCREMENT for table `actuators`
 --
 ALTER TABLE `actuators`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `actuators_events`
+--
+ALTER TABLE `actuators_events`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `areas`
 --
 ALTER TABLE `areas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `cameras`
 --
 ALTER TABLE `cameras`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `cameras_actuators`
+--
+ALTER TABLE `cameras_actuators`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `generate_events`
---
-ALTER TABLE `generate_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_event` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `groups_areas`
+--
+ALTER TABLE `groups_areas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `groups_services`
+--
+ALTER TABLE `groups_services`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `sensors`
 --
 ALTER TABLE `sensors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `sensors_actuators`
+--
+ALTER TABLE `sensors_actuators`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `services`
 --
@@ -315,7 +424,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users_groups`
 --
 ALTER TABLE `users_groups`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for dumped tables
 --
@@ -327,10 +436,11 @@ ALTER TABLE `actuators`
   ADD CONSTRAINT `actuators_ibfk_1` FOREIGN KEY (`area`) REFERENCES `areas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `areas`
+-- Constraints for table `actuators_events`
 --
-ALTER TABLE `areas`
-  ADD CONSTRAINT `areas_ibfk_1` FOREIGN KEY (`group`) REFERENCES `groups` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `actuators_events`
+  ADD CONSTRAINT `actuators_events_ibfk_1` FOREIGN KEY (`id_actuator`) REFERENCES `actuators` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `actuators_events_ibfk_2` FOREIGN KEY (`id_event`) REFERENCES `events` (`id_event`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `cameras`
@@ -339,13 +449,18 @@ ALTER TABLE `cameras`
   ADD CONSTRAINT `cameras_ibfk_1` FOREIGN KEY (`area`) REFERENCES `areas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `generate_events`
+-- Constraints for table `cameras_actuators`
 --
-ALTER TABLE `generate_events`
-  ADD CONSTRAINT `generate_events_ibfk_1` FOREIGN KEY (`id_event`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `generate_events_ibfk_2` FOREIGN KEY (`id_hw`) REFERENCES `actuators` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `generate_events_ibfk_3` FOREIGN KEY (`id_hw`) REFERENCES `cameras` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `generate_events_ibfk_4` FOREIGN KEY (`id_hw`) REFERENCES `sensors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `cameras_actuators`
+  ADD CONSTRAINT `cameras_actuators_ibfk_1` FOREIGN KEY (`id_actuator`) REFERENCES `actuators` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cameras_actuators_ibfk_2` FOREIGN KEY (`id_camera`) REFERENCES `cameras` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `groups_areas`
+--
+ALTER TABLE `groups_areas`
+  ADD CONSTRAINT `groups_areas_ibfk_1` FOREIGN KEY (`id_area`) REFERENCES `areas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `groups_areas_ibfk_2` FOREIGN KEY (`id_group`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `groups_services`
@@ -359,6 +474,13 @@ ALTER TABLE `groups_services`
 --
 ALTER TABLE `sensors`
   ADD CONSTRAINT `sensors_ibfk_1` FOREIGN KEY (`area`) REFERENCES `areas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `sensors_actuators`
+--
+ALTER TABLE `sensors_actuators`
+  ADD CONSTRAINT `sensors_actuators_ibfk_1` FOREIGN KEY (`id_actuator`) REFERENCES `actuators` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sensors_actuators_ibfk_2` FOREIGN KEY (`id_sensor`) REFERENCES `sensors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users_groups`
