@@ -1,17 +1,27 @@
 package it.univaq.masaccio.web;
 
-import it.univaq.masaccio.model.Message;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import it.univaq.masaccio.event.KafkaConsumeEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 public class MessageController {
 
-    // publishes returned message to defined topic (by @SendTo directive)
-    @MessageMapping("/messages")
-    @SendTo("/topic/messages")
-    public static String send(String msg) throws Exception {
-        return msg;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
+
+    @Autowired
+    private SimpMessagingTemplate template;
+
+    @RequestMapping(path="/messages", method=POST)
+    public void send(String message) {
+        this.template.convertAndSend("/topic/messages", message);
     }
+
+
 }

@@ -11,14 +11,18 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.errors.TimeoutException;
-import static it.univaq.masaccio.web.MessageController.send;
+import it.univaq.masaccio.event.KafkaConsumeEventPublisher;
 import static java.lang.System.exit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.*;
-
 
 public class ConsumerManager {
 
@@ -28,8 +32,13 @@ public class ConsumerManager {
     private KafkaConsumer<String, String> consumer;
     private Properties properties;
     private MasaccioDaoMySQL mysql;
-    private Map<Integer, Integer> sensors;
+    ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+    KafkaConsumeEventPublisher eventPublisher = (KafkaConsumeEventPublisher) context.getBean("kafkaConsumeEventPublisher");
 
+
+    public ConsumerManager(){
+
+    }
     public ConsumerManager(String address, String groupId){
         // create new properties kafka object
         this.properties = new Properties();
@@ -94,13 +103,11 @@ public class ConsumerManager {
     }
 
 
-
     /**
      * consumes all the data from all the subscribed topics
      * @param pollSize size of the single poll
      */
     public void consume(Integer pollSize){
-
         // take the time
         long startTime = System.currentTimeMillis();
         Integer refresh_time = Integer.parseInt(Main.properties.getProperty("refresh_time"));
@@ -115,19 +122,21 @@ public class ConsumerManager {
                 // poll return a list of records: Each record contains the topic and partition the record came from
                 ConsumerRecords<String, String> records = this.consumer.poll(pollSize);
                 for (ConsumerRecord<String, String> record : records) {
-                    LOGGER.info("consumed record: (topic = {}, partition = {}, offset = {}, key = {}, value = {})\n", record.topic(), record.partition(), record.offset(), record.key(), record.value());
-
+                    LOGGER.info("consumed record: (topic = {}, partition = {}, offset = {}, key = {}, value = {})", record.topic(), record.partition(), record.offset(), record.key(), record.value());
                     // push to websocket
-                    send(record.value());
-                    LOGGER.info("published message to websocket");
+                    LOGGER.info("generating event");
+                    eventPublisher.publishKafkaConsumeEvent(record.value());
                     // in order to say "ok, we saved"
                     consumer.commitAsync();
-                    LOGGER.info("offset committed");
+                    LOGGER.info("offset committed\n");
                 }
             }
 
         } catch (Exception e) {
             LOGGER.error("Exception in record consumption - {}", e.getMessage());
+            e.printStackTrace();
+            exit(1);
+
 
         } finally{
             consumer.close();

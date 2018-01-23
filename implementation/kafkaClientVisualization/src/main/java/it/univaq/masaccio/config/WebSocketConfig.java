@@ -1,4 +1,4 @@
-package it.univaq.masaccio.web;
+package it.univaq.masaccio.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -18,7 +18,8 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/messages").withSockJS();
+        registry.addEndpoint("/messages").setAllowedOrigins("*");
+        registry.addEndpoint("/messages").setAllowedOrigins("*").withSockJS();
     }
 
 }
