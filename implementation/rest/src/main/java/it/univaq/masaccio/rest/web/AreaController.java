@@ -1,6 +1,5 @@
 package it.univaq.masaccio.rest.web;
 
-
 import it.univaq.masaccio.rest.business.domain.Area;
 import it.univaq.masaccio.rest.business.domain.Sensor;
 import it.univaq.masaccio.rest.business.repository.MasaccioService;
