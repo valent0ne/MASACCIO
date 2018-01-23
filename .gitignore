@@ -106,3 +106,5 @@ implementation/rest/\.idea/
 implementation/rest/target/
 
 implementation/rest/it\.univaq\.masaccio\.rest\.iml
+
+implementation/kafkaClientVisualization/\.idea/
