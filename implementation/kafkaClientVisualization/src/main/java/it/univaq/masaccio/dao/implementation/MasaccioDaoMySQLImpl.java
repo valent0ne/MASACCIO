@@ -1,7 +1,5 @@
 package it.univaq.masaccio.dao.implementation;
 
-
-
 import it.univaq.masaccio.dao.data.DaoDataMySQLImpl;
 import it.univaq.masaccio.dao.exception.DaoException;
 import it.univaq.masaccio.dao.interfaces.MasaccioDaoMySQL;
@@ -10,9 +8,7 @@ import it.univaq.masaccio.model.Area;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * class responsible to the querying of the MySQL db
@@ -25,7 +21,6 @@ public class MasaccioDaoMySQLImpl extends DaoDataMySQLImpl implements MasaccioDa
      */
     public MasaccioDaoMySQLImpl(){
         super();
-
     }
 
     /**
@@ -36,7 +31,7 @@ public class MasaccioDaoMySQLImpl extends DaoDataMySQLImpl implements MasaccioDa
     public void init() throws DaoException {
         try{
             super.init();
-            this.getAreas = connection.prepareStatement("SELECT areas.name AS name FROM areas");
+            this.getAreas = connection.prepareStatement("SELECT * FROM areas");
         }catch (Exception e){
             throw new DaoException("Cannot initialize MosaccioDaoMySQL", e);
         }
@@ -54,7 +49,11 @@ public class MasaccioDaoMySQLImpl extends DaoDataMySQLImpl implements MasaccioDa
             ResultSet rs = this.getAreas.executeQuery();
             while(rs.next()){
                 Area a = new Area(this);
+                a.setId(rs.getString("id"));
                 a.setName(rs.getString("name"));
+                a.setDescription(rs.getString("description"));
+                a.setLatitude(rs.getString("latitude"));
+                a.setLongitude(rs.getString("longitude"));
                 out.add(a);
             }
 
@@ -64,5 +63,4 @@ public class MasaccioDaoMySQLImpl extends DaoDataMySQLImpl implements MasaccioDa
 
         return out;
     }
-
 }

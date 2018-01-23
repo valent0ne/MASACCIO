@@ -31,7 +31,9 @@ public class DaoDataMySQLImpl implements DaoData{
     public void init() throws DaoException {
 
         try {
+
             connection = datasource.getConnection();
+
         } catch (SQLException e) {
             throw new DaoException("Error: mysql db connection failed", e);
         }

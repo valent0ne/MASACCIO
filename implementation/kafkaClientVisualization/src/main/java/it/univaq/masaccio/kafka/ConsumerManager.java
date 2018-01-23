@@ -2,9 +2,9 @@ package it.univaq.masaccio.kafka;
 
 
 import it.univaq.masaccio.Main;
+import it.univaq.masaccio.dao.implementation.MasaccioDaoMySQLImpl;
 import it.univaq.masaccio.dao.interfaces.MasaccioDaoMySQL;
 import it.univaq.masaccio.model.Area;
-import it.univaq.masaccio.model.Message;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -12,6 +12,8 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.errors.TimeoutException;
 import static it.univaq.masaccio.web.MessageController.send;
+import static java.lang.System.exit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +43,7 @@ public class ConsumerManager {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 
         this.consumer = new KafkaConsumer<>(properties);
+        this.mysql = new MasaccioDaoMySQLImpl();
 
     }
 
@@ -82,9 +85,10 @@ public class ConsumerManager {
             this.mysql.close(); // to close the connection
         } catch (Exception e) {
             LOGGER.error("Exception while retrieving areas: {}",e.getMessage());
-            if (LOGGER.isDebugEnabled()){
-                e.printStackTrace();
-            }
+            e.printStackTrace();
+
+            exit(1);
+
         }
         return out;
     }
