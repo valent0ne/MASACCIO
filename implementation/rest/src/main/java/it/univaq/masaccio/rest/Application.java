@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application {
 
-    //starts the spring server
+    //starts the spring server.
     public static void main(String[] args){
         SpringApplication.run(Application.class, args);
     }
