@@ -1,0 +1,68 @@
+package it.univaq.masaccio.dao.implementation;
+
+
+
+import it.univaq.masaccio.dao.data.DaoDataMySQLImpl;
+import it.univaq.masaccio.dao.exception.DaoException;
+import it.univaq.masaccio.dao.interfaces.MasaccioDaoMySQL;
+import it.univaq.masaccio.model.Area;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * class responsible to the querying of the MySQL db
+ */
+public class MasaccioDaoMySQLImpl extends DaoDataMySQLImpl implements MasaccioDaoMySQL {
+    private PreparedStatement getAreas; // list of all the areas
+
+    /**
+     * constructor
+     */
+    public MasaccioDaoMySQLImpl(){
+        super();
+
+    }
+
+    /**
+     * initialize the connection to the db and declares the prepared statements
+     * @throws DaoException in case of errors
+     */
+    @Override
+    public void init() throws DaoException {
+        try{
+            super.init();
+            this.getAreas = connection.prepareStatement("SELECT areas.name AS name FROM areas");
+        }catch (Exception e){
+            throw new DaoException("Cannot initialize MosaccioDaoMySQL", e);
+        }
+    }
+
+    /**
+     * retrieves the list of all the areas from the MySQL db
+     * @return the list of all the areas
+     * @throws DaoException in case of errors
+     */
+    public List<Area> getAreas() throws DaoException{
+        List<Area> out = new ArrayList<>();
+
+        try{
+            ResultSet rs = this.getAreas.executeQuery();
+            while(rs.next()){
+                Area a = new Area(this);
+                a.setName(rs.getString("name"));
+                out.add(a);
+            }
+
+        }catch (Exception e){
+            throw new DaoException("Error MySQL query getAreas()", e);
+        }
+
+        return out;
+    }
+
+}
