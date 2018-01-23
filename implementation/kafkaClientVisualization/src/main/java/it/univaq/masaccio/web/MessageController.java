@@ -1,6 +1,6 @@
 package it.univaq.masaccio.web;
 
-import it.univaq.masaccio.event.KafkaConsumeEvent;
+import it.univaq.masaccio.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,8 @@ public class MessageController {
     @Autowired
     private SimpMessagingTemplate template;
 
-    @RequestMapping(path="/messages", method=POST)
-    public void send(String message) {
-        this.template.convertAndSend("/topic/messages", message);
+    @RequestMapping(path = "/messages", method = POST)
+    public void send(Message msg) {
+        CommService.send(msg);
     }
-
-
 }

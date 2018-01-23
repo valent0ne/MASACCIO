@@ -18,10 +18,10 @@ public class AreaController {
     @Autowired
     private MasaccioService service;
 
-    @GetMapping("/{id}")
-    public Response findAreaById(@PathVariable(value = "id") Long id) throws Exception{
-        Area area = service.findAreaById(id);
-        Response<Area> response = new Response<>(true, "area with id: "+id);
+    @GetMapping("/{name:.+}")
+    public Response findAreaByName(@PathVariable(value = "name") String name) throws Exception{
+        Area area = service.findAreaByName(name);
+        Response<Area> response = new Response<>(true, "area with name: "+name);
         response.setData(area);
         return response;
     }

@@ -25,7 +25,7 @@ public interface MasaccioService {
 
     List<Area> findAllAreas();
 
-    Area findAreaById(Long id);
+    Area findAreaByName(String name);
 
     // end Area servies
 

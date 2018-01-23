@@ -43,8 +43,8 @@ public class MasaccioServiceImpl implements MasaccioService{
 
 
     // Area services
-    public Area findAreaById(Long id){
-        return areaRepository.findOne(id);
+    public Area findAreaByName(String name){
+        return areaRepository.findOneByName(name);
     }
 
     public List<Area> findAllAreas(){

@@ -10,5 +10,5 @@ public interface AreaRepository extends JpaRepository<Area, Long> {
 
     List<Area> findAll();
 
-    Area findOne(Long id);
+    Area findOneByName(String name);
 }

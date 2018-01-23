@@ -5,7 +5,7 @@ License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 <!DOCTYPE HTML>
-<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>Masaccio - Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,6 +31,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- sockjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.js"></script>
+    <!-- stompjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+    <!-- chartjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.js"></script>
     <!----webfonts--->
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
     <!---//webfonts--->
@@ -50,7 +56,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <nav class="top1 navbar navbar-default navbar-static-top" role="navigation"
          style="margin-bottom: 0; border-bottom: 0">
         <div class="navbar-header">
-            <a class="navbar-brand" href="../index.html">Masaccio</a>
+            <a class="navbar-brand" href="index.html">Masaccio</a>
         </div>
         <!-- /.navbar-header -->
         <div class="navbar-default sidebar" role="navigation">
@@ -69,8 +75,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!-- NAV -->
     <div id="page-wrapper" class="gray-bg dashbard-1" style="min-height: 729px;">
         <div class="graphs">
-            <!-- CONTENT -->
-            <div class="grid_3 grid_4" style="margin-bottom: 1.5em;">
+            <!-- INFORMATION -->
+            <div v-if="display_info" class="grid_3 grid_4" style="margin-bottom: 1.5em;">
                 <h4>
                     <span>Choose an area</span>
                 </h4>
@@ -78,18 +84,18 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     by clicking on an area you will be redirected to the list of the sensors that are deployed in that area
                 </div>
             </div>
-
+            <!-- ERROR BOX -->
             <div v-if="display_error" class="grid_3 grid_4">
                 <div class="alert alert-danger" role="alert">
                     <strong>Ooops :(<br></strong> There has been an error connecting to the server.
                 </div>
             </div>
-
+            <!-- GALLERY -->
             <div v-if="display_gallery" class="gallery" style="padding: 0">
 
                 <div v-for="item in areas" class="col-md">
                     <div class="gallery-img">
-                        <a href="images/location_1.png" class="b-link-stripe b-animate-go swipebox">
+                        <a v-on:click="goToArea($event)" href="#" v-bind:id="item.name" class="b-link-stripe b-animate-go swipebox">
                             <img class="img-responsive" src="images/location_1.png" alt="">
                             <span class="zoom-icon"> </span>
                         </a>
@@ -103,6 +109,53 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
                 <div class="clearfix"></div>
             </div>
+
+            <!-- AREA INFOS -->
+            <div v-if="display_area_info" class="grid_3 grid_4" style="margin-bottom: 1.5em;">
+                <h4>
+                    <span>Area: {{area.name}}</span>
+                </h4>
+
+                <div class="well">
+                    Description: {{area.description}}
+                </div>
+                <div class="well">
+                    Latitude: {{area.latitude}}
+                </div>
+                <div class="well">
+                    Longitude: {{area.longitude}}
+                </div>
+                <div class="well">
+                    Elevation: {{area.elevation}}
+                </div>
+            </div>
+
+            <!-- GRAPH -->
+            <div v-if="display_sensor_readings_graph" class="grid_3 grid_4" style="margin-bottom: 1.5em;">
+                <canvas id="sensors_chart"></canvas>
+            </div>
+
+            <!-- SENSOR READINGS -->
+
+            <div v-if="display_sensor_readings" class="grid_3 grid_4" style="margin-bottom: 1.5em;">
+                <h4>
+                    <span>Real-time sensor's readings</span>
+                </h4>
+                <table class="table" id="sensors_readings_table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Sensor ID</th>
+                        <th>Payload</th>
+                        <th>Timestamp</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="sensors_readings_table_body">
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
 

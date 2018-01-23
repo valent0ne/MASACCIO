@@ -5,22 +5,19 @@ import it.univaq.masaccio.Main;
 import it.univaq.masaccio.dao.implementation.MasaccioDaoMySQLImpl;
 import it.univaq.masaccio.dao.interfaces.MasaccioDaoMySQL;
 import it.univaq.masaccio.model.Area;
+import it.univaq.masaccio.model.Message;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.errors.TimeoutException;
-import it.univaq.masaccio.event.KafkaConsumeEventPublisher;
 import static java.lang.System.exit;
+import static it.univaq.masaccio.web.CommService.send;
 
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.*;
 
@@ -32,9 +29,6 @@ public class ConsumerManager {
     private KafkaConsumer<String, String> consumer;
     private Properties properties;
     private MasaccioDaoMySQL mysql;
-    ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-    KafkaConsumeEventPublisher eventPublisher = (KafkaConsumeEventPublisher) context.getBean("kafkaConsumeEventPublisher");
-
 
     public ConsumerManager(){
 
@@ -123,9 +117,19 @@ public class ConsumerManager {
                 ConsumerRecords<String, String> records = this.consumer.poll(pollSize);
                 for (ConsumerRecord<String, String> record : records) {
                     LOGGER.info("consumed record: (topic = {}, partition = {}, offset = {}, key = {}, value = {})", record.topic(), record.partition(), record.offset(), record.key(), record.value());
+
+                    //extract data and create message to publish on websocket
+                    Document doc = Document.parse(record.value());
+
+                    Message msg = new Message();
+                    msg.setSensorId(doc.get("id").toString());
+                    msg.setPayload(doc.get("value").toString());
+                    msg.setTimestamp(doc.get("timestamp").toString());
+                    msg.setAreaName(record.topic());
+
                     // push to websocket
-                    LOGGER.info("generating event");
-                    eventPublisher.publishKafkaConsumeEvent(record.value());
+                    LOGGER.info("pushing to websocket");
+                    send(msg);
                     // in order to say "ok, we saved"
                     consumer.commitAsync();
                     LOGGER.info("offset committed\n");
@@ -134,8 +138,10 @@ public class ConsumerManager {
 
         } catch (Exception e) {
             LOGGER.error("Exception in record consumption - {}", e.getMessage());
-            e.printStackTrace();
-            exit(1);
+            if(LOGGER.isDebugEnabled()){
+                e.printStackTrace();
+            }
+            //exit(1);
 
 
         } finally{
