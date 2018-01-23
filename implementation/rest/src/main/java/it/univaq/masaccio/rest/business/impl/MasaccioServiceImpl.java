@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+// we expose this implementation of the interface,to the world.
 @Service
 @Transactional
 public class MasaccioServiceImpl implements MasaccioService{
 
-
+    // import of the already implemented interfaces from the framework and we use them.
     @Autowired
     private AreaRepository areaRepository;
 
