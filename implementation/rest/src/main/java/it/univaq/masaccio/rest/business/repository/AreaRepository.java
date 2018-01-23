@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-
+// we extend the interface of the framework.
 public interface AreaRepository extends JpaRepository<Area, Long> {
 
     List<Area> findAll();
