@@ -2,6 +2,7 @@ package it.univaq.masaccio.rest.business.domain;
 
 import javax.persistence.*;
 
+// Model
 @Entity
 @Table(name = "sensors")
 public class Sensor {

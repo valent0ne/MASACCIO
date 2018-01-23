@@ -6,6 +6,7 @@ import it.univaq.masaccio.rest.business.domain.Sensor;
 import java.util.List;
 
 
+// exposed interface to the world
 public interface MasaccioService {
 
 

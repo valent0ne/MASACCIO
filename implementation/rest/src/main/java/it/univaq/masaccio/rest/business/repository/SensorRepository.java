@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-
+// we extend the interface of the framework.
 public interface SensorRepository extends JpaRepository<Sensor, Long>{
 
     List<Sensor> findAll();
