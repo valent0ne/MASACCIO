@@ -34,10 +34,10 @@ public class AreaController {
         return response;
     }
 
-    @GetMapping("/{id}/sensors")
-    public Response findAllSensorsByArea(@PathVariable(value = "id") Long id) throws Exception{
-        List<Sensor> sensors = service.findAllSensorsByArea(id);
-        Response<List<Sensor>> response = new Response<>(true, "all sensors in area: "+id);
+    @GetMapping("/{name:.+}/sensors")
+    public Response findAllSensorsByArea(@PathVariable(value = "name") String name) throws Exception{
+        List<Sensor> sensors = service.findAllSensorsByArea(name);
+        Response<List<Sensor>> response = new Response<>(true, "all sensors in area: "+name);
         response.setData(sensors);
         return response;
 

@@ -26,9 +26,8 @@ public class MasaccioServiceImpl implements MasaccioService{
 
 
     // Sensor services
-    public List<Sensor> findAllSensorsByArea(Long id){
-        Area area = new Area();
-        area.setId(id);
+    public List<Sensor> findAllSensorsByArea(String name){
+        Area area = areaRepository.findOneByName(name);
         return sensorRepository.findAllByArea(area);
     }
 

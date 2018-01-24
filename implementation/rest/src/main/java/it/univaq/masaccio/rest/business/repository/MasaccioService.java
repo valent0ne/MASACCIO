@@ -12,7 +12,7 @@ public interface MasaccioService {
 
     // Sensor services
 
-    List<Sensor> findAllSensorsByArea(Long id);
+    List<Sensor> findAllSensorsByArea(String name);
 
     List<Sensor> findAllSensors();
 

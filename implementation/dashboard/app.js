@@ -2,13 +2,16 @@ var REST_API = "http://localhost:8080/masaccio/api";
 var WS = "http://localhost:8081/masaccio/ws/messages";
 var stompClient = null;
 var index = 0;
+var treshold = 25;
 
 var app = new Vue({
         el: '#page-wrapper',
         data: {
             areas: null,
             area: null,
+            graphs: null,
             message: null,
+            sensors: null,
             display_info: true,
             display_error: false,
             display_gallery: true,
@@ -34,13 +37,12 @@ var app = new Vue({
                         that.areas = response.data.data
                     })
                     .catch(function (reason) {
-                        that.display_error = true;
-                        that.display_gallery = false;
+                        that.deployError(reason);
                     })
             },
             goToArea: function (event) {
                 var that = this;
-                var target = event.currentTarget.id;
+                let target = event.currentTarget.id;
                 console.log("calling: " + REST_API + '/areas/' + target);
                 axios.get(REST_API + '/areas/' + target)
                     .then(function (response) {
@@ -50,56 +52,99 @@ var app = new Vue({
                             that.display_error = true;
                             return
                         }
-                        that.area = response.data.data
+                        that.area = response.data.data;
+                        console.log("retrieved data of area: "+that.area.name);
+                        console.log("displaying area page");
+                        that.displayAreaPage();
+                        console.log("retrieving sensors");
+                        that.getSensorsByArea().then(function (charts) {
+                            console.log("charts from getSensorsByArea "+charts);
+                            //connect to websocket
+                            wsConnect(target, charts);
+                        });
                     })
                     .catch(function (reason) {
-                        that.display_error = true;
+                        that.deployError(reason);
                     });
-                that.display_gallery = false;
-                that.display_info = false;
-                that.display_area_container = true;
-                that.display_area_info = true;
-                that.display_sensor_readings = true;
-                that.display_sensor_readings_graph = true;
 
-                //connect to websocket
-                wsConnect(target);
 
             },
+            getSensorsByArea: function () {
+                var that = this;
+                let charts = [];
+                console.log("calling: " + REST_API + '/areas/' + that.area.name + '/sensors');
+                return axios.get(REST_API + '/areas/' + that.area.name + '/sensors')
+                    .then(function (response) {
+                        console.log(response);
+                        that.message = response.message;
+                        if (that.message === "KO") {
+                            that.display_error = true;
+                            that.display_gallery = false;
+                            return
+                        }
+                        that.sensors = response.data.data;
+                        console.log("retrieved sensors: "+that.sensors);
+                        that.sensors.forEach(function(entry) {
+                            console.log("creating graph for sensor: "+entry.id);
+                            charts[entry.id] = createChart(entry);
+                            console.log("added chart "+ entry.id+": "+charts[entry.id]);
+                            console.log("created chart in getSensorsByArea: "+charts);
+                        });
+                        return charts;
+                    })
+                    .catch(function (reason) {
+                        that.deployError(reason);
+                    });
+            },
+            deployError: function(reason) {
+                console.log("deploying error... "+reason);
+                this.display_error = true;
+                this.display_area_info = false;
+                this.display_gallery = false;
+                this.display_info = false;
+                this.display_area_container = false;
+                this.display_sensor_readings = false;
+                this.display_sensor_readings_graph = false;
+            },
 
+            displayAreaPage: function() {
+                console.log("displaying area page...");
+                this.display_error = false;
+                this.display_area_info = true;
+                this.display_gallery = false;
+                this.display_info = false;
+                this.display_area_container = true;
+                this.display_sensor_readings = true;
+                this.display_sensor_readings_graph = true;
+
+            }
     },
     mounted: function () {this.getAreas()}
 });
 
-function wsConnect(target) {
+function wsConnect(target, charts) {
     let socket = new SockJS(WS);
     stompClient = Stomp.over(socket);
+
+    console.log("charts in wsConnect: "+charts);
 
     console.log("connecting to: " + '/topic/messsages/' + target);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        //create chart
-        let chart = createChart();
 
         stompClient.subscribe('/topic/messages/' + target, function (message) {
-            console.log("received message: " + message);
-            displayMessage(JSON.parse(message.body), chart);
+            let msg = JSON.parse(message.body);
+            console.log("received message: " + msg.sensorId);
+            console.log("sensorId: "+msg.sensorId);
+            console.log("chart inside subscribe: "+charts[msg.sensorId]);
+            displayMessage(msg, charts[msg.sensorId]);
         });
     });
 }
 
-function deployError() {
-    app.data.display_error = true;
-    app.data.display_area_info = false;
-    app.data.display_gallery = false;
-    app.data.display_info = false;
-    app.data.display_area_container = false;
-    app.data.display_sensor_readings = false;
-    app.data.display_sensor_readings_graph = false;
-}
-
 function displayMessage(data, chart){
     let table = document.getElementById("sensors_readings_table_body");
+
 
     // create row at 1st position
     let row = table.insertRow(0);
@@ -117,22 +162,23 @@ function displayMessage(data, chart){
     payload.innerHTML = data.payload;
     timestamp.innerHTML = data.timestamp;
 
+    console.log("adding data from sensor "+data.sensorId+" to chart "+chart);
+
     addDataToChart(chart, data.timestamp, data.payload);
-    if(index > 20){
+    if(index > treshold){
         removeDataFromChart(chart);
     }
 
 }
 
-//TODO ADD DATASET FOR EACH SENSOR
 
-function createChart() {
-    var config = {
+function createChart(item) {
+    let config = {
         type: 'line',
         data: {
             labels: [index],
             datasets: [{
-                label: "sensor 1",
+                label: "sensor "+item.id,
                 data: [{
                     x: 0,
                     y: 0
@@ -158,8 +204,16 @@ function createChart() {
                 }
             }
         };
-    var ctx = document.getElementById("sensors_chart").getContext("2d");
-    var chart = new Chart(ctx, config);
+
+    let chartsContainer = document.getElementById("display_sensor_readings_graph");
+    let chartContainer = document.createElement('canvas');
+    chartContainer.id = "sensors_chart_"+item.id;
+
+    chartsContainer.appendChild(chartContainer);
+
+    let ctx = document.getElementById("sensors_chart_"+item.id).getContext("2d");
+    let chart = new Chart(ctx, config);
+
     return chart;
 }
 
@@ -178,5 +232,6 @@ function removeDataFromChart(chart) {
     });
     chart.update();
 }
+
 
 
