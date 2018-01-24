@@ -166,13 +166,13 @@ function displayMessage(data, chart){
 
     addDataToChart(chart, data.timestamp, data.payload);
     if(index > treshold){
-        removeDataFromChart(chart);
         let rowCount = table.rows.length;
         table.deleteRow(rowCount -1);
     }
 
-
-
+    if(chart.data.datasets[0].data.length > treshold){
+        removeDataFromChart(chart);
+    }
 }
 
 
@@ -235,10 +235,13 @@ function addDataToChart(chart, label, data) {
 }
 
 function removeDataFromChart(chart) {
-    chart.data.labels.reverse().pop();
-    chart.data.datasets.forEach((dataset) => {
-        dataset.data.reverse().pop();
+
+    chart.data.labels.shift(); // remove the label first
+
+    chart.data.datasets.forEach(function(dataset) {
+        dataset.data.shift();
     });
+
     chart.update();
 }
 
