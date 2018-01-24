@@ -2,7 +2,7 @@ var REST_API = "http://localhost:8080/masaccio/api";
 var WS = "http://localhost:8081/masaccio/ws/messages";
 var stompClient = null;
 var index = 0;
-var treshold = 25;
+var treshold = 20;
 
 var app = new Vue({
         el: '#page-wrapper',
@@ -167,12 +167,20 @@ function displayMessage(data, chart){
     addDataToChart(chart, data.timestamp, data.payload);
     if(index > treshold){
         removeDataFromChart(chart);
+        let rowCount = table.rows.length;
+        table.deleteRow(rowCount -1);
     }
+
+
 
 }
 
 
 function createChart(item) {
+    let rgb1 = getRandomInt(0,255);
+    let rgb2 = getRandomInt(0,255);
+    let rgb3 = getRandomInt(0,255);
+
     let config = {
         type: 'line',
         data: {
@@ -182,10 +190,11 @@ function createChart(item) {
                 data: [{
                     x: 0,
                     y: 0
-                }]
-            }]
-
-        },
+                }],
+                backgroundColor: 'rgba('+rgb1+', '+rgb2+', '+rgb3+', 0.2)',
+                borderColor: 'rgba('+rgb1+', '+rgb2+', '+rgb3+', 0.3)',
+            }],
+            },
         options: {
             scales: {
                 xAxes: [{
@@ -231,6 +240,11 @@ function removeDataFromChart(chart) {
         dataset.data.reverse().pop();
     });
     chart.update();
+}
+
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 
