@@ -40,7 +40,7 @@ public class Producer {
         // which they were sent, even when retries occur.
         kafkaProps.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION,1);
         // We have to receive the leader ack in order to know that the message was written in a right way to the .
-        kafkaProps.put(ProducerConfig.ACKS_CONFIG, "all");
+        kafkaProps.put(ProducerConfig.ACKS_CONFIG, 0);
         this.producer = new KafkaProducer<>(kafkaProps);
 
     }
