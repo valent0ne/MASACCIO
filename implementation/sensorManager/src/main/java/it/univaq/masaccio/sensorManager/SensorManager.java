@@ -47,7 +47,7 @@ public class SensorManager {
 
 
     public String sense(){
-        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(new Date());
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss.SSS").format(new Date());
         double random = Math.random() * 100 + 1;
         String message = "{ 'id':'"+Main.properties.getProperty("sensor_id")+"', 'value':'"+random+"', 'timestamp':'"+timestamp+"'}";
         LOGGER.info("payload: {}", message);
