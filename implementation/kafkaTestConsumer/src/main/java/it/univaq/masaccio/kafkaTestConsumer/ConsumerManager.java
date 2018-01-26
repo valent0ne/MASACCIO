@@ -34,7 +34,7 @@ public class ConsumerManager {
         // we set here the group id
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, ""+System.nanoTime());
         // disable the autocommit
-        properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         // we set here values about the deserializer
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
@@ -77,7 +77,6 @@ public class ConsumerManager {
         // take the time
         long startTime = 0;
         int message = 0;
-        int delta = Integer.parseInt(Main.properties.getProperty("delta"));
         int topics_number = Integer.parseInt(Main.properties.getProperty("topics_number"));
         int total_messages = topics_number*Integer.parseInt(Main.properties.getProperty("messages_per_topic"));
         try {
@@ -91,7 +90,7 @@ public class ConsumerManager {
                     if (message == 1){
                         startTime = System.nanoTime();
                     }
-                    if (message >= total_messages - delta){
+                    if (message >= total_messages){
                         LOGGER.info("consumed a total of {} messages from {} topics", total_messages, topics_number);
                         closeTest(System.nanoTime() - startTime);
                     }
@@ -99,7 +98,7 @@ public class ConsumerManager {
 
 
                     // in order to say "ok, we saved"
-                    consumer.commitAsync();
+                    // consumer.commitSync();
                 }
             }
 
