@@ -120,13 +120,6 @@
   <SAElements xsi:type="components:Component" name="KafkaCluster" ClientOrServer="server">
     <ports xsi:type="components:InMessagePort"/>
     <ports xsi:type="components:OutMessagePort"/>
-    <modes xsi:type="components:InitialMode" name="">
-      <behaviouralElements xsi:type="components:ReceiveMessage" name="poll" outgoing="//@SAElements.12/@modes.0/@behaviouralElements.2" dataRecipientName="message" fromMessagePorts="//@SAElements.12/@ports.0"/>
-      <behaviouralElements xsi:type="components:MulticastSendMessage" name="forward" incoming="//@SAElements.12/@modes.0/@behaviouralElements.2" data="message" toMessagePorts="//@SAElements.12/@ports.1"/>
-      <behaviouralElements xsi:type="components:Link" source="//@SAElements.12/@modes.0/@behaviouralElements.0" target="//@SAElements.12/@modes.0/@behaviouralElements.1"/>
-    </modes>
-    <applicationData xsi:type="components:PrimitiveDataDeclaration" dataName="message" value="poll()" type="string"/>
-    <applicationData xsi:type="components:PrimitiveDataDeclaration" dataName="trigger" value="&quot;&quot;" type="string"/>
   </SAElements>
   <SAElements xsi:type="components:Connection" source="//@SAElements.4/@ports.1" target="//@SAElements.12/@ports.0"/>
   <SAElements xsi:type="components:Connection" source="//@SAElements.6/@ports.1" target="//@SAElements.12/@ports.0"/>
