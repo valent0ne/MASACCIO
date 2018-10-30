@@ -4,6 +4,6 @@ Design and development of a distributed real-time system that exposes services r
 
 Authors:
 
-- Stefano Valentini https://gitlab.com/valent0ne
-- Valentina Cecchini https://gitlab.com/Nimerya
-- Andrea Perelli https://gitlab.com/AndreaPerel
+- Stefano Valentini https://github.com/valent0ne
+- Valentina Cecchini https://github.com/Nimerya
+- Andrea Perelli https://github.com/Happy-Killer
